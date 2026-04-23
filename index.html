@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<title>StockPulse - Pro Trading Assistant</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="topbar">
+  <div class="logo">Stock<span>Pulse</span> <span style="font-size:10px;color:var(--text3);font-weight:500;margin-left:4px">v2 Pro</span></div>
+  <div class="search-box">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+    <input type="text" id="searchInput" placeholder="Search NSE stocks..." autocomplete="off">
+    <div class="dropdown" id="dropdown"></div>
+  </div>
+  <div class="topbar-right">
+    <div class="mkt-status"><span class="mkt-dot" id="mktDot"></span><span id="mktLabel">--</span></div>
+    <button class="theme-btn" onclick="toggleTheme()"><span id="themeIcon">&#9790;</span></button>
+  </div>
+</div>
+
+<div class="container">
+  <div class="welcome" id="welcomeView">
+    <h2>Professional Intraday Assistant</h2>
+    <p>Filtered signals, dynamic stop loss, risk management, and multi-timeframe analysis</p>
+    <div class="chips">
+      <div class="chip" onclick="loadStock('RELIANCE.NS')">RELIANCE</div>
+      <div class="chip" onclick="loadStock('TCS.NS')">TCS</div>
+      <div class="chip" onclick="loadStock('INFY.NS')">INFOSYS</div>
+      <div class="chip" onclick="loadStock('HDFCBANK.NS')">HDFC BANK</div>
+      <div class="chip" onclick="loadStock('ITC.NS')">ITC</div>
+      <div class="chip" onclick="loadStock('SBIN.NS')">SBI</div>
+    </div>
+  </div>
+
+  <div class="loading" id="loadingView"><div class="spinner"></div><p style="color:var(--text2);font-size:12px">Analyzing multi-timeframe data...</p></div>
+  <div class="error-msg" id="errorView"></div>
+
+  <div class="stock-view" id="stockView">
+    <!-- Price -->
+    <div class="price-header">
+      <div class="ph-left"><h1 id="sName">--</h1><div class="sub" id="sSub">--</div></div>
+      <div class="ph-right"><div class="ph-price" id="sPrice">--</div><span class="ph-change up" id="sChange">--</span></div>
+    </div>
+
+    <!-- Active Position Tracker -->
+    <div class="pos-tracker" id="posTracker" style="display:none">
+      <div class="pos-head"><span class="pos-title">Your Active Positions</span></div>
+      <div class="pos-content"></div>
+    </div>
+
+    <!-- Chart -->
+    <div class="chart-card">
+      <div class="chart-toolbar">
+        <div class="range-tabs">
+          <button class="range-tab active" data-range="1d" data-interval="1m">1D</button>
+          <button class="range-tab" data-range="5d" data-interval="5m">5D</button>
+          <button class="range-tab" data-range="1mo" data-interval="15m">1M</button>
+        </div>
+        <div style="display:flex;gap:3px">
+          <button class="ct-btn active" data-type="candle">Candle</button>
+          <button class="ct-btn" data-type="line">Line</button>
+        </div>
+      </div>
+      <canvas id="chartCanvas"></canvas>
+      <div class="ohlc-bar" id="ohlcBar"></div>
+    </div>
+
+    <!-- Signal Engine -->
+    <div class="signal-section">
+      <div class="sec-title">Pro Signal Engine <span style="font-size:10px;font-weight:normal;color:var(--text3);margin-left:auto">(Based on 5-min candles)</span></div>
+      
+      <!-- New Context Pills -->
+      <div id="signalContext" style="display:flex;flex-direction:column;gap:6px;margin-bottom:12px"></div>
+      
+      <div class="signal-overall neutral" id="signalOverall"></div>
+      <div class="strat-grid" id="stratGrid"></div>
+    </div>
+
+    <!-- Entry/Exit Calculator -->
+    <div class="calc-section">
+      <div class="sec-title" style="justify-content:space-between">Entry / Exit Calculator <span id="calcType" class="pos-badge buy">--</span></div>
+      <div id="calcBody"></div>
+      <div class="trade-form">
+        <div class="sec-title" style="font-size:12px;margin-bottom:6px">Place a Trade (then track here)</div>
+        <div id="riskWarning" style="display:none;background:var(--yellow-bg);color:var(--yellow);padding:8px;border-radius:6px;font-size:11px;font-weight:600;margin-bottom:8px"></div>
+        <div class="tf-row">
+          <select id="tfType" onchange="updateTradeBtn()"><option value="buy">BUY</option><option value="sell">SELL</option></select>
+          <input type="number" id="tfPrice" placeholder="Entry Price" step="0.05">
+          <input type="number" id="tfQty" placeholder="Qty" min="1">
+        </div>
+        <div class="tf-row">
+          <input type="number" id="tfSL" placeholder="Stop Loss" step="0.05">
+          <input type="number" id="tfT1" placeholder="Target 1" step="0.05">
+        </div>
+        <button class="btn-trade buy-btn" id="tfBtn" onclick="addPosition()">Add BUY Position</button>
+      </div>
+    </div>
+
+    <!-- Depth + Stats -->
+    <div class="two-col">
+      <div class="section-card"><h3>Market Depth</h3><div id="depthBox"></div></div>
+      <div class="section-card"><h3>Key Statistics</h3><div id="statsBox"></div></div>
+    </div>
+  </div>
+</div>
+
+<script src="trading.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
