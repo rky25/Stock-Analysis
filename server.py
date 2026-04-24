@@ -17,6 +17,8 @@ class ProxyHandler(http.server.SimpleHTTPRequestHandler):
             self.proxy_yahoo_finance()
         elif self.path.startswith('/api/search/'):
             self.proxy_yahoo_search()
+        elif self.path.startswith('/api/quote/'):
+            self.proxy_yahoo_quote()
         else:
             super().do_GET()
 
@@ -67,6 +69,29 @@ class ProxyHandler(http.server.SimpleHTTPRequestHandler):
             req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36')
             
             with urllib.request.urlopen(req, timeout=10) as response:
+                data = response.read()
+                self.send_response(200)
+                self.send_header('Content-Type', 'application/json')
+                self.send_header('Access-Control-Allow-Origin', '*')
+                self.end_headers()
+                self.wfile.write(data)
+        except Exception as e:
+            self.send_response(500)
+            self.send_header('Content-Type', 'application/json')
+            self.send_header('Access-Control-Allow-Origin', '*')
+            self.end_headers()
+            self.wfile.write(json.dumps({'error': str(e)}).encode())
+
+    def proxy_yahoo_quote(self):
+        """Proxy requests to Yahoo Finance quote API for rapid price updates"""
+        symbol = self.path[len('/api/quote/'):]
+        url = f"https://query1.finance.yahoo.com/v7/finance/quote?symbols={symbol}"
+        
+        try:
+            req = urllib.request.Request(url)
+            req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36')
+            
+            with urllib.request.urlopen(req, timeout=5) as response:
                 data = response.read()
                 self.send_response(200)
                 self.send_header('Content-Type', 'application/json')

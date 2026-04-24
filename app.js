@@ -1,5 +1,5 @@
-let currentSymbol='',refreshTimer=null,lastPrice=0,chartType='candle';
-let rawData=null,raw5m=null,raw15m=null,rawNifty=null;
+let currentSymbol='',refreshTimer=null,fastRefreshTimer=null,lastPrice=0,chartType='candle';
+let rawData=null,raw5m=null,raw15m=null,rawNifty=null,rawVix=null,vixValue=0;
 let analysisResult=null,calcResult=null;
 
 /* THEME */
@@ -43,24 +43,25 @@ async function doSearch(q){
 async function loadStock(sym){
   document.getElementById('dropdown').classList.remove('show');
   document.getElementById('searchInput').value=sym.replace('.NS','').replace('.BO','');
-  currentSymbol=sym;lastPrice=0;if(refreshTimer)clearInterval(refreshTimer);
+  currentSymbol=sym;lastPrice=0;if(refreshTimer)clearInterval(refreshTimer);if(fastRefreshTimer)clearInterval(fastRefreshTimer);
   show('loadingView');hide('welcomeView','stockView','errorView');
   try{
     await fetchContextData(sym);
     document.querySelectorAll('.range-tab').forEach(t=>t.classList.remove('active'));
     document.querySelector('.range-tab[data-range="1d"]').classList.add('active');
     refreshTimer=setInterval(()=>fetchContextData(sym,true),60000); // 1-minute full refresh
+    fastRefreshTimer=setInterval(()=>fetchFastQuote(sym), 3000); // 3-second rapid price refresh
   }catch(e){hide('loadingView');document.getElementById('errorView').textContent='Error: '+(e.message||'Failed');show('errorView')}
 }
 
 async function fetchContextData(sym, silent=false) {
   try {
-    // Parallel fetch: 1m (chart), 5m (signals), 15m (trend), NIFTY 15m (market trend)
-    const [res1m, res5m, res15m, resNifty] = await Promise.all([
+    const [res1m, res5m, res15m, resNifty, resVix] = await Promise.all([
       fetch(`/api/chart/${sym}?range=1d&interval=1m`).then(r => r.json()),
       fetch(`/api/chart/${sym}?range=5d&interval=5m`).then(r => r.json()),
       fetch(`/api/chart/${sym}?range=1mo&interval=15m`).then(r => r.json()),
-      fetch(`/api/chart/%5ENSEI?range=5d&interval=15m`).then(r => r.json()) // ^NSEI is Nifty 50
+      fetch(`/api/chart/%5ENSEI?range=5d&interval=15m`).then(r => r.json()),
+      fetch(`/api/chart/%5EINDIAVIX?range=1d&interval=1m`).then(r => r.json()).catch(() => null)
     ]);
 
     if(!res1m.chart||!res1m.chart.result) throw new Error('No 1m data');
@@ -68,6 +69,10 @@ async function fetchContextData(sym, silent=false) {
     if(res5m.chart && res5m.chart.result) raw5m = res5m.chart.result[0];
     if(res15m.chart && res15m.chart.result) raw15m = res15m.chart.result[0];
     if(resNifty.chart && resNifty.chart.result) rawNifty = resNifty.chart.result[0];
+    if(resVix && resVix.chart && resVix.chart.result) {
+      rawVix = resVix.chart.result[0];
+      vixValue = rawVix.meta.regularMarketPrice || 0;
+    }
 
     renderAll(rawData, silent);
   } catch (e) {
@@ -81,6 +86,77 @@ async function fetchRawData(sym,range,interval,silent){
   if(!r.ok)throw new Error('API '+r.status);const d=await r.json();
   if(!d.chart||!d.chart.result)throw new Error('No data');
   rawData=d.chart.result[0];renderAll(rawData,silent);
+}
+
+async function fetchFastQuote(sym) {
+    if (!sym) return;
+    try {
+        const r = await fetch(`/api/quote/${sym}`);
+        if(!r.ok) return;
+        const d = await r.json();
+        if(d.quoteResponse && d.quoteResponse.result && d.quoteResponse.result.length > 0) {
+            const q = d.quoteResponse.result[0];
+            const price = q.regularMarketPrice;
+            const prev = q.regularMarketPreviousClose;
+            
+            if (price && price !== lastPrice) {
+                // Flash animation
+                const pe = document.getElementById('sPrice');
+                pe.classList.remove('flash-green','flash-red');
+                void pe.offsetWidth; // trigger reflow
+                pe.classList.add(price > lastPrice ? 'flash-green' : 'flash-red');
+                
+                lastPrice = price;
+                pe.textContent = fmt(price);
+                
+                // Update change
+                if (prev) {
+                    const chg = price - prev;
+                    const pct = (chg / prev) * 100;
+                    const up = chg >= 0;
+                    const ce = document.getElementById('sChange');
+                    ce.className = 'ph-change ' + (up ? 'up' : 'down');
+                    ce.textContent = (up ? '\u25B2 ' : '\u25BC ') + (up ? '+' : '') + chg.toFixed(2) + ' (' + (up ? '+' : '') + pct.toFixed(2) + '%)';
+                }
+                
+                // Update Action Banner Price
+                const abPrice = document.getElementById('abPrice');
+                if (abPrice) abPrice.textContent = fmt(price);
+                
+                // Update Position Tracker PnL live
+                renderPositions(price);
+                
+                // --- REAL-TIME CANDLE UPDATE ---
+                if (rawData && rawData.indicators && rawData.indicators.quote[0] && document.getElementById('stockView').style.display !== 'none') {
+                    const rq = rawData.indicators.quote[0];
+                    if (rq.close && rq.close.length > 0) {
+                        const lastIdx = rq.close.length - 1;
+                        
+                        // Update the last candle's data
+                        rq.close[lastIdx] = price;
+                        if (price > rq.high[lastIdx]) rq.high[lastIdx] = price;
+                        if (price < rq.low[lastIdx]) rq.low[lastIdx] = price;
+                        
+                        // Update the OHLC text bar
+                        const meta = rawData.meta;
+                        const o = meta.regularMarketOpen || rq.open.find(v=>v!=null) || 0;
+                        const vh = rq.high.filter(v=>v!=null);
+                        const vl = rq.low.filter(v=>v!=null);
+                        const h = Math.max(meta.regularMarketDayHigh || 0, ...vh);
+                        const l = Math.min(meta.regularMarketDayLow || Infinity, ...vl);
+                        
+                        document.getElementById('ohlcBar').innerHTML =
+                            `<div class="ohlc-item">O<span>${fmt(o)}</span></div><div class="ohlc-item">H<span style="color:var(--green)">${fmt(h)}</span></div><div class="ohlc-item">L<span style="color:var(--red)">${fmt(l)}</span></div><div class="ohlc-item">C<span>${fmt(price)}</span></div><div class="ohlc-item">Vol<span>${shortNum(meta.regularMarketVolume||0)}</span></div>`;
+                        
+                        // Redraw the chart immediately
+                        drawChart(rawData.timestamp || [], rq.open || [], rq.high || [], rq.low || [], rq.close || [], rq.volume || [], prev);
+                    }
+                }
+            }
+        }
+    } catch(e) {
+        // silently ignore fast fetch errors
+    }
 }
 
 /* RENDER ALL */
@@ -118,16 +194,52 @@ function renderAll(res,silent){
     const qNifty=rawNifty.indicators.quote[0]||{};
     const niftyTrend = Trading.getNiftyTrend(qNifty.close||[]);
 
-    // 3. Analyze on 5m data
-    const q5=raw5m.indicators.quote[0]||{};
+    // 3. Extract Prev Day Data for Pivot Points
+    let prevDayData = null;
+    const t5 = raw5m.timestamp || [];
+    const q5 = raw5m.indicators.quote[0] || {};
+    if (t5.length > 0) {
+        const today = new Date(t5[t5.length - 1] * 1000).getDate();
+        let pHigh = -Infinity, pLow = Infinity, pClose = null;
+        for (let i = t5.length - 1; i >= 0; i--) {
+            const day = new Date(t5[i] * 1000).getDate();
+            if (day !== today) {
+                pClose = q5.close[i]; // Last close of previous day
+                const targetDay = day;
+                for (let j = i; j >= 0; j--) {
+                    if (new Date(t5[j] * 1000).getDate() === targetDay) {
+                        if (q5.high[j] > pHigh) pHigh = q5.high[j];
+                        if (q5.low[j] < pLow) pLow = q5.low[j];
+                    } else {
+                        break;
+                    }
+                }
+                prevDayData = { high: pHigh, low: pLow, close: pClose };
+                break;
+            }
+        }
+    }
+
+    // 4. Analyze on 5m data (with VIX)
     analysisResult = Trading.analyze(
-      q5.close||[], q5.high||[], q5.low||[], q5.volume||[], 
-      price, trend15m, niftyTrend
+      t5, q5.close||[], q5.high||[], q5.low||[], q5.volume||[], 
+      price, trend15m, niftyTrend, prevDayData, vixValue
     );
 
+    // 5. Immediate Action on 1m data
+    let immediateAction = null;
+    if (analysisResult) {
+       const t1m = res.timestamp || [];
+       const q1m = res.indicators.quote[0] || {};
+       immediateAction = Trading.analyzeImmediateAction(
+          t1m, q1m.close||[], q1m.high||[], q1m.low||[], q1m.volume||[],
+          price, analysisResult.vwap, analysisResult.pivots, h, l
+       );
+    }
+
     if(analysisResult){
-      renderSignals(analysisResult, trend15m, niftyTrend);
-      calcResult=Trading.calcEntryExit(price,analysisResult.atr,analysisResult.overall);
+      renderSignals(analysisResult, trend15m, niftyTrend, immediateAction);
+      calcResult=Trading.calcEntryExit(price,analysisResult.atr,analysisResult.overall,analysisResult.pivots);
       renderCalc(calcResult);
       // Log signal if strong
       if(!silent && (analysisResult.overall==='STRONG BUY'||analysisResult.overall==='STRONG SELL')){
@@ -157,25 +269,88 @@ function renderAll(res,silent){
 }
 
 /* SIGNALS */
-function renderSignals(a, trend15m, niftyTrend){
+function renderSignals(a, trend15m, niftyTrend, immediateAction){
   const icons={buy:'\u2705','strong-buy':'\u{1F525}',sell:'\u274C','strong-sell':'\u26D4',neutral:'\u26A0\uFE0F'};
   
-  // Render overall verdict
-  document.getElementById('signalOverall').className='signal-overall '+a.overallClass;
-  document.getElementById('signalOverall').innerHTML=`<span class="so-icon">${icons[a.overallClass]||'\u26A0\uFE0F'}</span><div class="so-text"><div class="so-verdict">${a.overall}</div><div class="so-sub">Score: ${a.buyScore} Buy vs ${a.sellScore} Sell (out of ${a.total}) \u2022 5m Base</div></div>`;
+  // --- ACTION BANNER with CONFIDENCE ---
+  const banner = document.getElementById('actionBanner');
+  const abPrice = document.getElementById('abPrice');
+  const abSignal = document.getElementById('abSignal');
   
-  // Render Warnings/Context
+  if (banner && abPrice && abSignal) {
+      banner.style.display = 'flex';
+      banner.className = 'action-banner ' + a.overallClass;
+      abPrice.textContent = fmt(lastPrice);
+      
+      let actionText = 'WAIT \u2014 NOT CONFIDENT';
+      if(a.overallClass === 'strong-buy') actionText = 'STRONG BUY';
+      else if(a.overallClass === 'buy') actionText = 'BUY';
+      else if(a.overallClass === 'strong-sell') actionText = 'STRONG SELL';
+      else if(a.overallClass === 'sell') actionText = 'SELL';
+      
+      abSignal.innerHTML = actionText + ' <span style="font-size:18px;opacity:0.8">(' + a.confidence + '%)</span>';
+  }
+  
+  // --- IMMEDIATE ACTION BOX ---
+  const immBox = document.getElementById('immediateActionBox');
+  if (immBox && immediateAction) {
+    immBox.style.display = 'block';
+    immBox.className = 'imm-box intensity-' + immediateAction.intensity;
+    let icon = '\u23F3';
+    if(immediateAction.intensity === 3) icon = '\u{1F6A8}';
+    else if(immediateAction.intensity === 2) icon = '\u26A0\uFE0F';
+    
+    immBox.innerHTML = `
+      <div class="imm-header">
+        <span class="imm-icon">${icon}</span>
+        <span class="imm-title">Live 1-Min Trigger</span>
+        <span class="imm-action ${immediateAction.action === 'WAIT' ? 'wait' : 'act'}">${immediateAction.action}</span>
+      </div>
+      <div class="imm-msg">${immediateAction.msg}</div>
+    `;
+  } else if (immBox) {
+    immBox.style.display = 'none';
+  }
+
+  // --- CONFIDENCE METER ---
+  const confColor = a.confidence >= 85 ? 'var(--green)' : a.confidence >= 70 ? 'var(--accent)' : a.confidence >= 55 ? 'var(--yellow)' : 'var(--red)';
+  const confLabel = a.confidence >= 85 ? 'VERY HIGH' : a.confidence >= 70 ? 'HIGH' : a.confidence >= 55 ? 'MODERATE' : 'LOW';
+
+  // Render overall verdict with confidence
+  document.getElementById('signalOverall').className='signal-overall '+a.overallClass;
+  document.getElementById('signalOverall').innerHTML=`
+    <span class="so-icon">${icons[a.overallClass]||'\u26A0\uFE0F'}</span>
+    <div class="so-text">
+      <div class="so-verdict">${a.overall}</div>
+      <div class="so-sub">${a.verdictReason}</div>
+    </div>
+    <div style="text-align:center;min-width:70px">
+      <div style="font-size:24px;font-weight:900;color:${confColor}">${a.confidence}%</div>
+      <div style="font-size:9px;font-weight:700;color:${confColor};letter-spacing:0.5px">${confLabel}</div>
+    </div>`;
+
+  // Confidence bar
+  const confBarHTML = `<div style="height:6px;background:var(--border2);border-radius:3px;margin-bottom:12px;overflow:hidden">
+    <div style="height:100%;width:${a.confidence}%;background:${confColor};border-radius:3px;transition:width 0.5s"></div>
+  </div>
+  <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text3);margin-bottom:12px">
+    <span>${a.regimeDesc}</span>
+    <span>BUY ${a.buyVotes} vs SELL ${a.sellVotes} votes</span>
+    <span>VIX: ${vixValue ? vixValue.toFixed(1) : '--'}</span>
+  </div>`;
+  
+  // Render Warnings
   const ctxDiv = document.getElementById('signalContext');
   if(a.warnings && a.warnings.length > 0) {
-    ctxDiv.innerHTML = a.warnings.map(w => `<div class="warn-pill"><span class="warn-icon">\u26A0\uFE0F</span>${w}</div>`).join('');
+    ctxDiv.innerHTML = confBarHTML + a.warnings.map(w => `<div class="warn-pill"><span class="warn-icon">\u26A0\uFE0F</span>${w}</div>`).join('');
     ctxDiv.style.display = 'flex';
   } else {
-    ctxDiv.innerHTML = `<div class="warn-pill safe"><span class="warn-icon">\u2705</span>All filters clear: Good volume, favorable trend, safe time</div>`;
+    ctxDiv.innerHTML = confBarHTML + `<div class="warn-pill safe"><span class="warn-icon">\u2705</span>All clear: Good volume, trend aligned, safe time</div>`;
     ctxDiv.style.display = 'flex';
   }
 
-  // Render strategies
-  document.getElementById('stratGrid').innerHTML=a.strategies.map(s=>`<div class="strat-card"><div class="strat-top"><span class="strat-name">${s.name} <span style="font-size:8px;color:var(--text3);font-weight:normal">(wt:${s.weight})</span></span><span class="strat-sig ${s.signal}">${s.signal}</span></div><div class="strat-val">${s.value}</div><div class="strat-desc">${s.desc}</div></div>`).join('');
+  // Render indicator cards (votes)
+  document.getElementById('stratGrid').innerHTML=a.strategies.map(s=>`<div class="strat-card"><div class="strat-top"><span class="strat-name">${s.name}</span><span class="strat-sig ${s.signal}">${s.signal === 'SKIP' ? 'SKIP' : s.signal}</span></div><div class="strat-val">${s.value}</div><div class="strat-desc">${s.desc}</div></div>`).join('');
 }
 
 /* CALCULATOR */
@@ -387,20 +562,24 @@ function drawChart(ts,opens,highs,lows,closes,volumes,prevClose){
   const toY=v=>padT+(priceH-padT)*(1-(v-minP)/rngP);
 
   // Pivot Points on Chart (if analyzed)
-  if(analysisResult && data.length > 0) {
-      // Very basic pivot lines
+  if(analysisResult && analysisResult.pivots && data.length > 0) {
        ctx.setLineDash([2,2]);
        ctx.lineWidth=1;
+       const p = analysisResult.pivots;
        const pivots = [
-          {v: prevClose * 1.01, c: '--green', l: 'R1'}, 
-          {v: prevClose * 0.99, c: '--red', l: 'S1'}
+          {v: p.r2, c: '--green', l: 'R2'},
+          {v: p.r1, c: '--green', l: 'R1'}, 
+          {v: p.pivot, c: '--accent', l: 'P'}, 
+          {v: p.s1, c: '--red', l: 'S1'},
+          {v: p.s2, c: '--red', l: 'S2'}
        ];
-       pivots.forEach(p => {
-           const y = toY(p.v);
+       pivots.forEach(pt => {
+           const y = toY(pt.v);
            if(y>padT&&y<priceH) {
-              ctx.strokeStyle=dk?getComputedStyle(document.documentElement).getPropertyValue(p.c):getComputedStyle(document.documentElement).getPropertyValue(p.c);
+              ctx.strokeStyle=dk?getComputedStyle(document.documentElement).getPropertyValue(pt.c):getComputedStyle(document.documentElement).getPropertyValue(pt.c);
               ctx.globalAlpha=0.2;ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke();
               ctx.globalAlpha=1;
+              ctx.fillStyle=ctx.strokeStyle;ctx.font='9px Inter';ctx.fillText(pt.l, w - 15, y - 3);
            }
        });
        ctx.setLineDash([]);
@@ -446,9 +625,11 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.querySelectorAll('.range-tab').forEach(t=>{t.addEventListener('click',function(){
     document.querySelectorAll('.range-tab').forEach(b=>b.classList.remove('active'));this.classList.add('active');
     if(refreshTimer)clearInterval(refreshTimer);
+    if(fastRefreshTimer)clearInterval(fastRefreshTimer);
     if(this.dataset.range==='1d') {
         fetchContextData(currentSymbol);
         refreshTimer=setInterval(()=>fetchContextData(currentSymbol,true),60000);
+        fastRefreshTimer=setInterval(()=>fetchFastQuote(currentSymbol), 3000);
     } else {
         fetchRawData(currentSymbol,this.dataset.range,this.dataset.interval);
     }
