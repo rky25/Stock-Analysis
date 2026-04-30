@@ -1,0 +1,243 @@
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  padding-top: 80px;
+  background: radial-gradient(ellipse at 20% 50%, rgba(41, 98, 255, 0.08) 0%, transparent 50%),
+              radial-gradient(ellipse at 80% 20%, rgba(0, 188, 212, 0.06) 0%, transparent 50%),
+              var(--bg-primary);
+}
+
+.heroBg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.4;
+  animation: float 8s ease-in-out infinite;
+}
+
+.orb1 {
+  width: 400px;
+  height: 400px;
+  background: rgba(41, 98, 255, 0.15);
+  top: -10%;
+  left: -5%;
+}
+
+.orb2 {
+  width: 300px;
+  height: 300px;
+  background: rgba(0, 188, 212, 0.12);
+  bottom: 10%;
+  right: -5%;
+  animation-delay: -4s;
+}
+
+.orb3 {
+  width: 200px;
+  height: 200px;
+  background: rgba(41, 98, 255, 0.1);
+  top: 40%;
+  right: 20%;
+  animation-delay: -2s;
+}
+
+.heroContent {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.heroBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  background: rgba(41, 98, 255, 0.08);
+  border: 1px solid rgba(41, 98, 255, 0.15);
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--accent-light);
+  margin-bottom: 28px;
+}
+
+.liveDot {
+  width: 8px;
+  height: 8px;
+  background: var(--green);
+  border-radius: 50%;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.heroTitle {
+  font-size: clamp(2.5rem, 6vw, 4.2rem);
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 24px;
+  letter-spacing: -0.03em;
+}
+
+.heroSubtitle {
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  color: var(--text-secondary);
+  max-width: 620px;
+  margin: 0 auto 36px;
+  line-height: 1.7;
+}
+
+.heroCTAs {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 48px;
+  flex-wrap: wrap;
+}
+
+.trustRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.trustItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.trustIcon {
+  color: var(--accent-light);
+}
+
+.heroPreview {
+  margin-top: 60px;
+  position: relative;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.previewFrame {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px var(--accent-glow);
+  position: relative;
+}
+
+.previewBar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid var(--border);
+}
+
+.previewDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.previewContent {
+  padding: 24px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+  min-height: 200px;
+}
+
+.miniCard {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+}
+
+.miniCardLabel {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+
+.miniCardValue {
+  font-size: 1.4rem;
+  font-weight: 700;
+  font-family: var(--font-heading);
+}
+
+.miniCardChange {
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.changeUp { color: var(--green); }
+.changeDown { color: var(--red); }
+
+.miniChart {
+  height: 40px;
+  margin-top: 10px;
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.miniBar {
+  flex: 1;
+  background: rgba(41, 98, 255, 0.3);
+  border-radius: 2px 2px 0 0;
+  min-height: 4px;
+}
+
+@media (max-width: 768px) {
+  .hero {
+    min-height: auto;
+    padding: 100px 0 50px;
+  }
+
+  .heroCTAs {
+    flex-direction: column;
+  }
+
+  .heroCTAs .btn {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .trustRow {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .previewContent {
+    grid-template-columns: 1fr;
+  }
+
+  .heroPreview {
+    margin-top: 40px;
+  }
+}

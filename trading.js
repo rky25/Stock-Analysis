@@ -1,8 +1,99 @@
 /* =============================================
-   TRADING ENGINE v3 — Confidence-Based Decisions
+   TRADING ENGINE v4 — Enhanced Signal System
    ============================================= */
 
+// ===== NAMED CONSTANTS (no more magic numbers) =====
+const CONFIG = {
+  // ADX Regime Thresholds
+  ADX_STRONG_TREND: 25,
+  ADX_WEAK_TREND: 15,
+  ADX_TRADE_GATE: 20,        // was 25 — relaxed to allow weak trends
+
+  // RSI Thresholds
+  RSI_TREND_BUY: 55,
+  RSI_TREND_SELL: 45,
+  RSI_RANGE_OVERSOLD: 30,
+  RSI_RANGE_OVERBOUGHT: 70,
+  RSI_BLOCK_OVERBOUGHT: 72,  // was 65 — relaxed
+  RSI_BLOCK_OVERSOLD: 28,    // was 35 — relaxed
+
+  // Volume
+  VOL_CONFIRM_RATIO: 1.2,
+  VOL_TRADE_GATE: 0.8,       // was 1.0 — relaxed
+  VOL_SPIKE_MULTIPLIER: 3,
+
+  // Confidence Thresholds
+  CONF_STRONG: 75,           // was 80
+  CONF_NORMAL: 60,           // was 65
+  VOTES_STRONG: 4,           // out of 5 now
+  VOTES_NORMAL: 3,           // out of 5 now
+
+  // Targets (Risk multiples)
+  TARGET_1_MULT: 1.5,
+  TARGET_2_MULT: 2.5,        // was 4.0 (same as T3!) — FIXED
+  TARGET_3_MULT: 4.0,
+
+  // Stop Loss
+  SL_ATR_MULT: 1.0,
+
+  // VIX
+  VIX_WARNING: 17,
+  VIX_HIGH: 20,
+  VIX_EXTREME: 25,
+
+  // VWAP proximity
+  VWAP_NEAR_PCT: 0.003,
+  PIVOT_NEAR_PCT: 0.003,
+
+  // ORB
+  ORB_VOL_MULT: 1.5,
+  ORB_START_HOUR: 9, ORB_START_MIN: 15,
+  ORB_END_HOUR: 9, ORB_END_MIN: 30,
+
+  // Sector alignment
+  SECTOR_MAP: {
+    'HDFCBANK.NS': '^NSEBANK', 'ICICIBANK.NS': '^NSEBANK', 'AXISBANK.NS': '^NSEBANK',
+    'KOTAKBANK.NS': '^NSEBANK', 'SBIN.NS': '^NSEBANK',
+    'INFY.NS': '^CNXIT', 'TCS.NS': '^CNXIT', 'WIPRO.NS': '^CNXIT',
+    'TECHM.NS': '^CNXIT', 'HCLTECH.NS': '^CNXIT',
+    'RELIANCE.NS': '^CNXENERGY', 'BPCL.NS': '^CNXENERGY', 'ONGC.NS': '^CNXENERGY',
+    'MARUTI.NS': '^CNXAUTO', 'TATAMOTORS.NS': '^CNXAUTO', 'M&M.NS': '^CNXAUTO',
+  },
+};
+
+const IST_FORMATTER = new Intl.DateTimeFormat('en-CA', {
+  timeZone: 'Asia/Kolkata',
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+  hour: '2-digit',
+  minute: '2-digit',
+  hour12: false
+});
+
+const dayKeyCache = new Map();
+
 const Trading = {
+  getISTParts(timestampMs) {
+    const parts = IST_FORMATTER.formatToParts(new Date(timestampMs));
+    const map = {};
+    parts.forEach(part => { if (part.type !== 'literal') map[part.type] = part.value; });
+    return {
+      year: +map.year,
+      month: +map.month,
+      day: +map.day,
+      hour: +map.hour,
+      minute: +map.minute,
+      dayKey: `${map.year}-${map.month}-${map.day}`
+    };
+  },
+
+  getISTDayKey(timestampSec) {
+    if (dayKeyCache.has(timestampSec)) return dayKeyCache.get(timestampSec);
+    const key = this.getISTParts(timestampSec * 1000).dayKey;
+    dayKeyCache.set(timestampSec, key);
+    return key;
+  },
 
   // ===== CORE CALCULATIONS =====
   calcATR(highs, lows, closes, period=14) {
@@ -62,10 +153,9 @@ const Trading = {
     let currentDay = null;
     for (let i = 0; i < closes.length; i++) {
       if (closes[i] == null || volumes[i] == null || timestamps[i] == null) { r.push(null); continue; }
-      const date = new Date(timestamps[i] * 1000);
-      const day = date.getDate();
-      if (day !== currentDay) {
-        cumVol = 0; cumTP = 0; currentDay = day;
+      const dayKey = this.getISTDayKey(timestamps[i]);
+      if (dayKey !== currentDay) {
+        cumVol = 0; cumTP = 0; currentDay = dayKey;
       }
       const tp = ((highs[i] || closes[i]) + (lows[i] || closes[i]) + closes[i]) / 3;
       cumTP += tp * volumes[i]; cumVol += volumes[i]; r.push(cumVol ? cumTP / cumVol : null);
@@ -131,6 +221,56 @@ const Trading = {
     };
   },
 
+  classifySetup(price, vwapVal, emaFast, emaSlow, rsi, regime, dominantSide, pivots) {
+    const distFromVWAP = vwapVal ? Math.abs(price - vwapVal) / vwapVal : 0;
+    const nearVWAP = distFromVWAP <= 0.003;
+    const nearPivot = pivots && Math.abs(price - pivots.pivot) / price <= 0.003;
+
+    if (regime === 'TRENDING' && dominantSide === 'BUY' && price > vwapVal && emaFast > emaSlow) {
+      return {
+        name: nearVWAP ? 'Trend Pullback Long' : 'Trend Continuation Long',
+        description: nearVWAP ? 'Price is holding near VWAP inside an uptrend.' : 'Momentum is aligned for trend continuation on the long side.'
+      };
+    }
+    if (regime === 'TRENDING' && dominantSide === 'SELL' && price < vwapVal && emaFast < emaSlow) {
+      return {
+        name: nearVWAP ? 'Trend Pullback Short' : 'Trend Continuation Short',
+        description: nearVWAP ? 'Price is rejecting VWAP inside a downtrend.' : 'Momentum is aligned for trend continuation on the short side.'
+      };
+    }
+    if (regime === 'RANGING' && nearPivot) {
+      return {
+        name: dominantSide === 'BUY' ? 'Support Reversal' : 'Resistance Reversal',
+        description: 'Price is near the pivot zone in a sideways market, so mean-reversion matters more than trend.'
+      };
+    }
+    if (regime === 'RANGING' && ((dominantSide === 'BUY' && rsi < 35) || (dominantSide === 'SELL' && rsi > 65))) {
+      return {
+        name: dominantSide === 'BUY' ? 'Oversold Bounce' : 'Overbought Fade',
+        description: 'Range conditions and RSI extremes suggest a short-term reversal setup.'
+      };
+    }
+
+    // ORB Breakout setup (after 9:30)
+    if (regime === 'TRENDING' && dominantSide === 'BUY' && price > vwapVal) {
+      return {
+        name: 'ORB Breakout Long',
+        description: 'Price broke above the opening range with momentum. Trend + ORB alignment.'
+      };
+    }
+    if (regime === 'TRENDING' && dominantSide === 'SELL' && price < vwapVal) {
+      return {
+        name: 'ORB Breakdown Short',
+        description: 'Price broke below the opening range with momentum. Trend + ORB alignment.'
+      };
+    }
+
+    return {
+      name: dominantSide === 'BUY' ? 'Breakout Watch' : 'Breakdown Watch',
+      description: 'Momentum is leaning one way, but the move still needs confirmation.'
+    };
+  },
+
   // NEW: Volume gate check
   checkVolume(volumes) {
     const valid = volumes.filter(v => v != null && v > 0);
@@ -146,9 +286,10 @@ const Trading = {
   },
 
   // NEW: Time of day check
-  checkTime() {
-    const now = new Date(), ist = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
-    const h = ist.getHours(), m = ist.getMinutes(), mins = h * 60 + m;
+  checkTime(timestampSec=null) {
+    const refMs = timestampSec != null ? timestampSec * 1000 : Date.now();
+    const ist = this.getISTParts(refMs);
+    const mins = ist.hour * 60 + ist.minute;
     if (mins < 555) return { zone: 'PRE', warn: 'Market not open yet', safe: false };         // Before 9:15
     if (mins < 570) return { zone: 'TRAP', warn: '9:15-9:30 danger zone — avoid new trades', safe: false }; // 9:15-9:30
     if (mins < 870) return { zone: 'SAFE', warn: '', safe: true };                              // 9:30-2:30
@@ -157,13 +298,58 @@ const Trading = {
     return { zone: 'CLOSED', warn: 'Market is closed', safe: false };
   },
 
-  // ===== MAIN ANALYSIS — v3 Confidence-Based =====
-  analyze(timestamps, closes5m, highs5m, lows5m, vols5m, price, trend15m, niftyTrend, prevDayData, vixValue) {
+  // ===== NIFTY REGIME CLASSIFIER (Phase 4) =====
+  classifyMarketRegime(niftyCloses) {
+    if (!niftyCloses || niftyCloses.length < 25) return { regime: 'UNKNOWN', desc: 'Insufficient data' };
+    const ema21 = this.calcEMA(niftyCloses, 21);
+    const adx = this.calcADX(
+      niftyCloses.map((c, i) => i > 0 ? Math.max(c, niftyCloses[i-1]) : c), // approx highs
+      niftyCloses.map((c, i) => i > 0 ? Math.min(c, niftyCloses[i-1]) : c), // approx lows
+      niftyCloses, 14
+    );
+    const lastAdx = adx.adx;
+    const e21 = ema21.filter(v => v != null);
+    const emaSlope = e21.length >= 6 ? e21[e21.length - 1] - e21[e21.length - 6] : 0;
+
+    if (lastAdx > 25 && emaSlope > 0) return { regime: 'TRENDING_UP', desc: `Nifty trending UP (ADX ${lastAdx.toFixed(0)})` };
+    if (lastAdx > 25 && emaSlope < 0) return { regime: 'TRENDING_DOWN', desc: `Nifty trending DOWN (ADX ${lastAdx.toFixed(0)})` };
+    return { regime: 'CHOPPY', desc: `Nifty choppy/sideways (ADX ${lastAdx.toFixed(0)})` };
+  },
+
+  // ===== VIX DYNAMIC POSITION SIZING (Phase 4) =====
+  getVixAdjustment(vixValue) {
+    if (vixValue > CONFIG.VIX_EXTREME) return { sizeMult: 0, atrMult: 0, blocked: true, desc: 'VIX > 25 — NO TRADE' };
+    if (vixValue > CONFIG.VIX_HIGH) return { sizeMult: 0.5, atrMult: 2.0, blocked: false, desc: 'VIX 20-25 — 50% size, 2x ATR stop' };
+    if (vixValue > CONFIG.VIX_WARNING) return { sizeMult: 0.7, atrMult: 1.5, blocked: false, desc: 'VIX 17-20 — 70% size, 1.5x ATR stop' };
+    if (vixValue > 13) return { sizeMult: 1.0, atrMult: 1.2, blocked: false, desc: 'VIX 13-17 — Normal size, 1.2x ATR stop' };
+    return { sizeMult: 1.0, atrMult: 1.0, blocked: false, desc: 'VIX < 13 — Normal conditions' };
+  },
+
+  // ===== OPENING RANGE BREAKOUT (Phase 4) =====
+  calcOpeningRange(timestamps1m, highs1m, lows1m, vols1m) {
+    if (!timestamps1m || timestamps1m.length < 5) return null;
+    let orbHigh = -Infinity, orbLow = Infinity, totalVol = 0, orbCount = 0;
+    for (let i = 0; i < timestamps1m.length; i++) {
+      const ist = this.getISTParts(timestamps1m[i] * 1000);
+      if (ist.hour === 9 && ist.minute >= 15 && ist.minute < 30) {
+        if (highs1m[i] != null) orbHigh = Math.max(orbHigh, highs1m[i]);
+        if (lows1m[i] != null) orbLow = Math.min(orbLow, lows1m[i]);
+        if (vols1m[i] != null) totalVol += vols1m[i];
+        orbCount++;
+      }
+    }
+    if (orbCount < 3 || !isFinite(orbHigh) || !isFinite(orbLow)) return null;
+    return { high: orbHigh, low: orbLow, avgVol: totalVol / orbCount, range: orbHigh - orbLow };
+  },
+
+  // ===== MAIN ANALYSIS — v5 Regime-Aware =====
+  analyze(timestamps, closes5m, highs5m, lows5m, vols5m, price, trend15m, niftyTrend, prevDayData, vixValue, opts={}) {
     const n = closes5m.length;
     if (n < 30) return null;
 
     const warnings = [];
-    const timeCheck = this.checkTime();
+    const analysisTime = opts.timestamp != null ? opts.timestamp : timestamps[n - 1];
+    const timeCheck = this.checkTime(analysisTime);
     if (!timeCheck.safe) warnings.push(timeCheck.warn);
 
     const volCheck = this.checkVolume(vols5m);
@@ -206,11 +392,11 @@ const Trading = {
 
     // === 3-ZONE ADX REGIME ===
     let regime, regimeDesc;
-    if (adx.adx > 25) { regime = 'TRENDING'; regimeDesc = 'Strong Trend (ADX ' + adx.adx.toFixed(0) + ')'; }
-    else if (adx.adx >= 15) { regime = 'WEAK'; regimeDesc = 'Weak Trend (ADX ' + adx.adx.toFixed(0) + ')'; }
+    if (adx.adx > CONFIG.ADX_STRONG_TREND) { regime = 'TRENDING'; regimeDesc = 'Strong Trend (ADX ' + adx.adx.toFixed(0) + ')'; }
+    else if (adx.adx >= CONFIG.ADX_WEAK_TREND) { regime = 'WEAK'; regimeDesc = 'Weak Trend (ADX ' + adx.adx.toFixed(0) + ')'; }
     else { regime = 'RANGING'; regimeDesc = 'Sideways (ADX ' + adx.adx.toFixed(0) + ')'; }
 
-    // === SCORE SYSTEM (0-6) — 6 indicators, each +1 ===
+    // === SCORE SYSTEM (0-5) — 5 Core Indicators, each +1 ===
     let buyVotes = 0, sellVotes = 0;
     const indicators = [];
 
@@ -218,47 +404,45 @@ const Trading = {
     if (vwapSignal === 'BUY') buyVotes++; else sellVotes++;
     indicators.push({ name: 'VWAP', value: '\u20B9' + vwapVal.toFixed(2), signal: vwapSignal, desc: vwapDesc, vote: vwapSignal });
 
-    // 2. Supertrend (+1, only in trending/weak)
-    if (regime === 'RANGING') {
-      stDesc = 'Ignored (Ranging market)';
-      indicators.push({ name: 'Supertrend', value: '\u20B9' + stVal.toFixed(2), signal: 'SKIP', desc: stDesc, vote: 'SKIP' });
-    } else {
-      if (stSignal === 'BUY') buyVotes++; else sellVotes++;
-      indicators.push({ name: 'Supertrend', value: '\u20B9' + stVal.toFixed(2), signal: stSignal, desc: stDesc, vote: stSignal });
-    }
-
-    // 3. RSI(14) (+1)
+    // 2. RSI(14) (+1)
     let rsiSignal = 'NEUTRAL', rsiDesc = 'RSI neutral zone';
     if (regime === 'TRENDING' || regime === 'WEAK') {
-      if (rsi > 55) { rsiSignal = 'BUY'; rsiDesc = 'RSI > 55 confirms up'; buyVotes++; }
-      else if (rsi < 45) { rsiSignal = 'SELL'; rsiDesc = 'RSI < 45 confirms down'; sellVotes++; }
+      if (rsi > CONFIG.RSI_TREND_BUY) { rsiSignal = 'BUY'; rsiDesc = 'RSI > ' + CONFIG.RSI_TREND_BUY + ' confirms up'; buyVotes++; }
+      else if (rsi < CONFIG.RSI_TREND_SELL) { rsiSignal = 'SELL'; rsiDesc = 'RSI < ' + CONFIG.RSI_TREND_SELL + ' confirms down'; sellVotes++; }
     } else {
-      if (rsi < 30) { rsiSignal = 'BUY'; rsiDesc = 'Oversold — bounce likely'; buyVotes++; }
-      else if (rsi > 70) { rsiSignal = 'SELL'; rsiDesc = 'Overbought — drop likely'; sellVotes++; }
+      if (rsi < CONFIG.RSI_RANGE_OVERSOLD) { rsiSignal = 'BUY'; rsiDesc = 'Oversold — bounce likely'; buyVotes++; }
+      else if (rsi > CONFIG.RSI_RANGE_OVERBOUGHT) { rsiSignal = 'SELL'; rsiDesc = 'Overbought — drop likely'; sellVotes++; }
     }
     indicators.push({ name: 'RSI (14)', value: rsi.toFixed(1), signal: rsiSignal, desc: rsiDesc, vote: rsiSignal });
 
-    // 4. EMA 9/21 (+1)
-    if (emaSignal === 'BUY') buyVotes++; else sellVotes++;
-    indicators.push({ name: 'EMA 9/21', value: 'EMA9:' + e9.toFixed(1) + ' / EMA21:' + e21.toFixed(1), signal: emaSignal, desc: emaDesc, vote: emaSignal });
+    // 3. Supertrend (+1) — NEW: promoted from context to core vote
+    if (stSignal === 'BUY') buyVotes++; else sellVotes++;
+    indicators.push({ name: 'Supertrend', value: '\u20B9' + stVal.toFixed(2), signal: stSignal, desc: stDesc, vote: stSignal });
 
-    // 5. 15-Min Trend (+1)
+    // 4. 15-Min Trend (+1)
     let t15Signal = 'NEUTRAL', t15Desc = 'No 15m trend data';
     if (trend15m === 'UP') { t15Signal = 'BUY'; t15Desc = '15m trend UP'; buyVotes++; }
     else if (trend15m === 'DOWN') { t15Signal = 'SELL'; t15Desc = '15m trend DOWN'; sellVotes++; }
     indicators.push({ name: '15m Trend', value: trend15m || '--', signal: t15Signal, desc: t15Desc, vote: t15Signal });
 
-    // 6. Nifty Alignment (+1)
+    // 5. Nifty Alignment (+1)
     let niftySignal = 'NEUTRAL', niftyDesc = 'No Nifty data';
     if (niftyTrend === 'UP') { niftySignal = 'BUY'; niftyDesc = 'Nifty rising'; buyVotes++; }
     else if (niftyTrend === 'DOWN') { niftySignal = 'SELL'; niftyDesc = 'Nifty falling'; sellVotes++; }
     indicators.push({ name: 'Nifty 50', value: niftyTrend || '--', signal: niftySignal, desc: niftyDesc, vote: niftySignal });
 
-    // 7. Bollinger (bonus in ranging, replaces skipped Supertrend)
+    // 6. Sector Index Alignment (+1 bonus vote) — Phase 4
+    const sectorTrend = opts.sectorTrend || null;
+    let sectorSignal = 'NEUTRAL', sectorDesc = 'No sector data';
+    if (sectorTrend === 'UP') { sectorSignal = 'BUY'; sectorDesc = 'Sector index rising'; buyVotes++; }
+    else if (sectorTrend === 'DOWN') { sectorSignal = 'SELL'; sectorDesc = 'Sector index falling'; sellVotes++; }
+    if (sectorTrend) indicators.push({ name: 'Sector', value: sectorTrend, signal: sectorSignal, desc: sectorDesc, vote: sectorSignal });
+
+    // Context Indicators (Not Votes — supplementary info)
     let bollSignal = 'NEUTRAL', bollDesc = 'Within bands';
     if (regime === 'RANGING') {
-      if (price <= bL * 1.005) { bollSignal = 'BUY'; bollDesc = 'At lower band — bounce'; buyVotes++; }
-      else if (price >= bU * 0.995) { bollSignal = 'SELL'; bollDesc = 'At upper band — reversal'; sellVotes++; }
+      if (price <= bL * 1.005) { bollSignal = 'BUY'; bollDesc = 'At lower band — bounce'; }
+      else if (price >= bU * 0.995) { bollSignal = 'SELL'; bollDesc = 'At upper band — reversal'; }
     }
     indicators.push({ name: 'Bollinger', value: '\u20B9' + bL.toFixed(0) + ' - ' + bU.toFixed(0), signal: bollSignal, desc: bollDesc, vote: bollSignal });
 
@@ -266,49 +450,52 @@ const Trading = {
     const totalVotes = buyVotes + sellVotes;
     const dominantSide = buyVotes >= sellVotes ? 'BUY' : 'SELL';
     const dominantVotes = Math.max(buyVotes, sellVotes);
-    const minorityVotes = Math.min(buyVotes, sellVotes);
 
     let confidence = 0;
-    // Base: agreement ratio (max 40 pts)
-    confidence += totalVotes > 0 ? (dominantVotes / totalVotes) * 40 : 0;
-    // ADX clarity (max 15 pts): strong trend or very clear range
+    // Base: agreement ratio (max 35 pts)
+    confidence += totalVotes > 0 ? (dominantVotes / totalVotes) * 35 : 0;
+    // ADX clarity (max 15 pts)
     if (adx.adx > 30) confidence += 15;
-    else if (adx.adx > 25) confidence += 10;
-    else if (adx.adx < 12) confidence += 12; // clear range
+    else if (adx.adx > CONFIG.ADX_STRONG_TREND) confidence += 12;
+    else if (adx.adx < CONFIG.ADX_WEAK_TREND) confidence += 8;
     else confidence += 5;
     // Volume confirmation (max 15 pts)
     if (volCheck.ratio >= 2) confidence += 15;
-    else if (volCheck.ratio >= 1.2) confidence += 10;
+    else if (volCheck.ratio >= CONFIG.VOL_CONFIRM_RATIO) confidence += 12;
+    else if (volCheck.ratio >= CONFIG.VOL_TRADE_GATE) confidence += 6;
     else confidence += 3;
-    // Nifty alignment (max 10 pts)
+    // Nifty/15m alignment (max 20 pts)
     if ((dominantSide === 'BUY' && niftyTrend === 'UP') || (dominantSide === 'SELL' && niftyTrend === 'DOWN')) confidence += 10;
     else if (niftyTrend === null) confidence += 5;
-    // 15m alignment (max 10 pts)
     if ((dominantSide === 'BUY' && trend15m === 'UP') || (dominantSide === 'SELL' && trend15m === 'DOWN')) confidence += 10;
     else if (trend15m === null) confidence += 5;
+    // Supertrend alignment bonus (max 5 pts)
+    if ((dominantSide === 'BUY' && stSignal === 'BUY') || (dominantSide === 'SELL' && stSignal === 'SELL')) confidence += 5;
     // Time safety (max 10 pts)
     if (timeCheck.safe) confidence += 10;
-    else if (timeCheck.zone === 'LATE') confidence += 3;
+    else if (timeCheck.zone === 'LATE') confidence += 5;
 
-    // VIX penalty
-    if (vixValue > 20) confidence = Math.max(0, confidence - 10);
+    // VIX penalty (graduated)
+    if (vixValue > CONFIG.VIX_EXTREME) confidence = Math.max(0, confidence - 25);
+    else if (vixValue > CONFIG.VIX_HIGH) confidence = Math.max(0, confidence - 15);
+    else if (vixValue > CONFIG.VIX_WARNING) confidence = Math.max(0, confidence - 5);
 
     confidence = Math.min(100, Math.round(confidence));
 
-    // === FINAL VERDICT — Only BUY/SELL if confidence >= 70 ===
+    // === FINAL VERDICT (5-indicator system) ===
     let overall, overallClass, verdictReason;
-    if (confidence >= 85 && dominantVotes >= 5) {
+    if (confidence >= CONFIG.CONF_STRONG && dominantVotes >= CONFIG.VOTES_STRONG) {
       overall = dominantSide === 'BUY' ? 'STRONG BUY' : 'STRONG SELL';
       overallClass = dominantSide === 'BUY' ? 'strong-buy' : 'strong-sell';
-      verdictReason = dominantVotes + '/6 indicators agree. Very high confidence.';
-    } else if (confidence >= 70 && dominantVotes >= 4) {
+      verdictReason = dominantVotes + '/5 core indicators agree. Very high confidence.';
+    } else if (confidence >= CONFIG.CONF_NORMAL && dominantVotes >= CONFIG.VOTES_NORMAL) {
       overall = dominantSide;
       overallClass = dominantSide.toLowerCase();
-      verdictReason = dominantVotes + '/6 indicators agree. Good confidence.';
+      verdictReason = dominantVotes + '/5 core indicators agree. Good confidence.';
     } else {
       overall = 'NEUTRAL';
       overallClass = 'neutral';
-      verdictReason = 'Only ' + dominantVotes + '/6 agree (confidence ' + confidence + '%). Not enough conviction — WAIT.';
+      verdictReason = 'Only ' + dominantVotes + '/5 agree (confidence ' + confidence + '%). WAIT.';
     }
 
     // Pivots
@@ -317,28 +504,89 @@ const Trading = {
 
     const atr = this.calcATR(highs5m, lows5m, closes5m);
     const atrVal = atr.filter(v => v != null).pop() || (price * 0.005);
+    const setup = this.classifySetup(price, vwapVal, e9, e21, rsi, regime, dominantSide, pivots);
+
+    // === HARD FILTERS (relaxed, data-driven) ===
+    if (overall !== 'NEUTRAL') {
+      if (adx.adx < CONFIG.ADX_TRADE_GATE) {
+        overall = 'NEUTRAL';
+        overallClass = 'neutral';
+        verdictReason = 'BLOCKED: ADX < ' + CONFIG.ADX_TRADE_GATE + ' (' + adx.adx.toFixed(1) + '). No clear trend.';
+      } else if (overall.includes('BUY') && rsi > CONFIG.RSI_BLOCK_OVERBOUGHT) {
+        overall = 'NEUTRAL';
+        overallClass = 'neutral';
+        verdictReason = 'BLOCKED: RSI > ' + CONFIG.RSI_BLOCK_OVERBOUGHT + ' (' + rsi.toFixed(1) + '). Overbought.';
+      } else if (overall.includes('SELL') && rsi < CONFIG.RSI_BLOCK_OVERSOLD) {
+        overall = 'NEUTRAL';
+        overallClass = 'neutral';
+        verdictReason = 'BLOCKED: RSI < ' + CONFIG.RSI_BLOCK_OVERSOLD + ' (' + rsi.toFixed(1) + '). Oversold.';
+      } else if (volCheck.ratio < CONFIG.VOL_TRADE_GATE) {
+        overall = 'NEUTRAL';
+        overallClass = 'neutral';
+        verdictReason = 'BLOCKED: Low volume (' + volCheck.ratio.toFixed(1) + 'x). Need >= ' + CONFIG.VOL_TRADE_GATE + 'x avg.';
+      }
+    }
+
+    // VIX extreme block (Phase 4 — dynamic)
+    const vixAdj = this.getVixAdjustment(vixValue);
+    if (vixAdj.blocked && overall !== 'NEUTRAL') {
+      overall = 'NEUTRAL';
+      overallClass = 'neutral';
+      verdictReason = 'BLOCKED: ' + vixAdj.desc;
+    }
+
+    // Nifty Regime Filter (Phase 4) — gate counter-trend setups
+    const niftyRegime = opts.niftyRegime || null;
+    if (niftyRegime && overall !== 'NEUTRAL') {
+      if (niftyRegime.regime === 'CHOPPY') {
+        const allowed = ['Support Reversal', 'Resistance Reversal'];
+        // In classifySetup we already computed the setup — check it after
+      }
+    }
+
+    // Both BUY/SELL and STRONG BUY/SELL now generate trade plans
+    const shouldTrade = overall !== 'NEUTRAL';
+    const action = shouldTrade ? overall.replace('STRONG ', '') : 'NO TRADE';
+    const invalidation = shouldTrade
+      ? dominantSide === 'BUY'
+        ? Math.min(vwapVal, stVal || price, pivots?.pivot ?? price - atrVal)
+        : Math.max(vwapVal, stVal || price, pivots?.pivot ?? price + atrVal)
+      : null;
+    const invalidationLabel = shouldTrade ? (dominantSide === 'BUY' ? 'Invalid below' : 'Invalid above') : null;
 
     return {
       overall, overallClass, confidence, verdictReason,
       buyVotes, sellVotes, dominantSide, regime, regimeDesc,
       strategies: indicators,
       warnings, atr: atrVal, vwap: vwapVal, supertrend: stVal, supertrendDir: stDir,
-      volumeOk: volCheck.ok, volRatio: volCheck.ratio, timeZone: timeCheck.zone, adxValue: adx.adx, pivots
+      volumeOk: volCheck.ok, volRatio: volCheck.ratio, timeZone: timeCheck.zone, adxValue: adx.adx, pivots,
+      action, shouldTrade, setup, invalidation, invalidationLabel
     };
   },
 
-  // ===== ENTRY/EXIT CALCULATOR (1.5:1 and 3:1 R:R) =====
-  calcEntryExit(price, atr, signal, pivots) {
-    const isBuy = signal !== 'SELL' && signal !== 'STRONG SELL';
-    let sl = isBuy ? price - 1.5 * atr : price + 1.5 * atr;
+  // ===== ENTRY/EXIT CALCULATOR (1.5:1 and 3:1 R:R) — Phase 4: VIX-aware =====
+  calcEntryExit(price, atr, signal, pivots, capital=100000, riskPct=1, vixValue=0) {
+    if (signal !== 'BUY' && signal !== 'STRONG BUY' && signal !== 'SELL' && signal !== 'STRONG SELL') return null;
+    const isBuy = signal === 'BUY' || signal === 'STRONG BUY';
+
+    // VIX-dynamic ATR multiplier for stop loss
+    const vixAdj = this.getVixAdjustment(vixValue);
+    const atrMult = CONFIG.SL_ATR_MULT * vixAdj.atrMult;
+
+    let sl = isBuy ? price - atrMult * atr : price + atrMult * atr;
     if (pivots) {
-      if (isBuy && price > pivots.pivot && price - pivots.pivot < 2 * atr) sl = pivots.pivot - atr * 0.5;
-      else if (!isBuy && price < pivots.pivot && pivots.pivot - price < 2 * atr) sl = pivots.pivot + atr * 0.5;
+      if (isBuy && price > pivots.pivot && price - pivots.pivot < 2.5 * atr) sl = Math.min(sl, pivots.pivot - atr * 0.5);
+      else if (!isBuy && price < pivots.pivot && pivots.pivot - price < 2.5 * atr) sl = Math.max(sl, pivots.pivot + atr * 0.5);
     }
     const risk = Math.abs(price - sl);
-    let t1 = isBuy ? price + 1.5 * risk : price - 1.5 * risk;
-    let t2 = isBuy ? price + 3 * risk : price - 3 * risk;
-    let t3 = isBuy ? price + 4 * risk : price - 4 * risk;
+    const riskBudget = capital * (riskPct / 100);
+    // VIX-dynamic position sizing
+    let qty = Math.max(1, Math.floor(riskBudget / Math.max(risk, 0.01)));
+    qty = Math.max(1, Math.round(qty * vixAdj.sizeMult));
+
+    let t1 = isBuy ? price + CONFIG.TARGET_1_MULT * risk : price - CONFIG.TARGET_1_MULT * risk;
+    let t2 = isBuy ? price + CONFIG.TARGET_2_MULT * risk : price - CONFIG.TARGET_2_MULT * risk;
+    let t3 = isBuy ? price + CONFIG.TARGET_3_MULT * risk : price - CONFIG.TARGET_3_MULT * risk;
     if (pivots) {
       if (isBuy) {
         if (t1 < pivots.r1 && price < pivots.r1) t1 = pivots.r1;
@@ -350,7 +598,9 @@ const Trading = {
     }
     return {
       type: isBuy ? 'BUY' : 'SELL', entry: price, sl: +sl.toFixed(2), risk: +risk.toFixed(2),
-      target1: +t1.toFixed(2), target2: +t2.toFixed(2), target3: +t3.toFixed(2)
+      target1: +t1.toFixed(2), target2: +t2.toFixed(2), target3: +t3.toFixed(2),
+      qty, capital, riskPct, riskBudget: +riskBudget.toFixed(2), positionValue: +(qty * price).toFixed(2),
+      vixDesc: vixAdj.desc, vixSizeMult: vixAdj.sizeMult
     };
   },
 
@@ -374,12 +624,12 @@ const Trading = {
   },
 
   // ===== IMMEDIATE ACTION ENGINE (1-Min Data) =====
-  analyzeImmediateAction(timestamps1m, closes1m, highs1m, lows1m, vols1m, currentPrice, vwap, pivots, dayHigh, dayLow) {
+  analyzeImmediateAction(timestamps1m, opens1m, closes1m, highs1m, lows1m, vols1m, currentPrice, vwap, pivots, dayHigh, dayLow) {
     if (!closes1m || closes1m.length < 5) return null;
     const n = closes1m.length;
     
-    // Get last few candles (use previous close if open is not available in arrays)
-    const c0 = closes1m[n-1], o0 = closes1m[n-2], h0 = highs1m[n-1], l0 = lows1m[n-1], v0 = vols1m[n-1] || 0;
+    // Use the real candle open when available; fall back to prior close.
+    const c0 = closes1m[n-1], o0 = opens1m?.[n-1] ?? closes1m[n-2], h0 = highs1m[n-1], l0 = lows1m[n-1], v0 = vols1m[n-1] || 0;
     const isBullishCandle = c0 > o0;
     const isBearishCandle = c0 < o0;
     
@@ -461,6 +711,250 @@ const Trading = {
     }
 
     return { action, msg, intensity, isVolumeSpike, nearLevel };
+  },
+
+  getSeriesSliceAtOrBefore(raw, timestampSec) {
+    if (!raw || !raw.timestamp || !raw.indicators || !raw.indicators.quote || !raw.indicators.quote[0]) return [];
+    const closes = raw.indicators.quote[0].close || [];
+    const out = [];
+    for (let i = 0; i < raw.timestamp.length; i++) {
+      if (raw.timestamp[i] > timestampSec) break;
+      if (closes[i] != null) out.push(closes[i]);
+    }
+    return out;
+  },
+
+  getValueAtOrBefore(raw, timestampSec) {
+    if (!raw || !raw.timestamp || !raw.indicators || !raw.indicators.quote || !raw.indicators.quote[0]) return 0;
+    const closes = raw.indicators.quote[0].close || [];
+    let value = 0;
+    for (let i = 0; i < raw.timestamp.length; i++) {
+      if (raw.timestamp[i] > timestampSec) break;
+      if (closes[i] != null) value = closes[i];
+    }
+    return value || 0;
+  },
+
+  getPrevDayDataAt(timestamps, highs, lows, closes, index) {
+    if (!timestamps || index <= 0) return null;
+    const currentDay = this.getISTDayKey(timestamps[index]);
+    let prevDay = null;
+    let high = -Infinity, low = Infinity, close = null;
+    for (let i = index - 1; i >= 0; i--) {
+      const dayKey = this.getISTDayKey(timestamps[i]);
+      if (dayKey === currentDay) continue;
+      if (prevDay === null) prevDay = dayKey;
+      if (dayKey !== prevDay) break;
+      if (highs[i] != null) high = Math.max(high, highs[i]);
+      if (lows[i] != null) low = Math.min(low, lows[i]);
+      if (close == null && closes[i] != null) close = closes[i];
+    }
+    if (prevDay === null || !isFinite(high) || !isFinite(low) || close == null) return null;
+    return { high, low, close };
+  },
+
+  calcTradingCosts(entry, exit, qty=1, slippageBps=2) {
+    // Slippage (retained for realism, typically 2bps)
+    const slippage = ((entry + exit) * qty * slippageBps) / 10000;
+    
+    // NSE Intraday Cost Model
+    const buyVal = entry * qty;
+    const sellVal = exit * qty;
+    const turnover = buyVal + sellVal;
+
+    // 1. Brokerage: Rs 20 or 0.03% whichever is lower (per side)
+    const buyBrokerage = Math.min(20, buyVal * 0.0003);
+    const sellBrokerage = Math.min(20, sellVal * 0.0003);
+    const totalBrokerage = buyBrokerage + sellBrokerage;
+
+    // 2. STT: 0.025% on sell side only for intraday
+    const stt = Math.round(sellVal * 0.00025);
+
+    // 3. Exchange Transaction Charges (NSE): 0.00325% on turnover
+    const excChg = turnover * 0.0000325;
+
+    // 4. GST: 18% on (Brokerage + Exchange Charges)
+    const gst = (totalBrokerage + excChg) * 0.18;
+
+    // 5. SEBI Levy: Rs 10 per crore (0.0001%) on turnover
+    const sebi = turnover * 0.000001;
+
+    // 6. Stamp Duty: 0.003% on buy side only
+    const stamp = Math.round(buyVal * 0.00003);
+
+    const exactFees = totalBrokerage + stt + excChg + gst + sebi + stamp;
+    
+    return +(slippage + exactFees).toFixed(2);
+  },
+
+  backtestStrategy(raw5m, raw15m, rawNifty, rawVix) {
+    if (!raw5m || !raw5m.timestamp || !raw5m.indicators || !raw5m.indicators.quote || !raw5m.indicators.quote[0]) return null;
+    const q5 = raw5m.indicators.quote[0];
+    const timestamps = raw5m.timestamp || [];
+    const opens = q5.open || [];
+    const highs = q5.high || [];
+    const lows = q5.low || [];
+    const closes = q5.close || [];
+    const volumes = q5.volume || [];
+    if (timestamps.length < 60) return null;
+
+    const trades = [];
+    let equity = 0, peak = 0, maxDrawdown = 0;
+
+    for (let i = 30; i < timestamps.length - 1; i++) {
+      const candleTime = timestamps[i];
+      if (!this.checkTime(candleTime).safe) continue;
+
+      const prevDayData = this.getPrevDayDataAt(timestamps, highs, lows, closes, i);
+      if (!prevDayData) continue;
+
+      const trend15m = this.get15mTrend(this.getSeriesSliceAtOrBefore(raw15m, candleTime));
+      const niftyTrend = this.getNiftyTrend(this.getSeriesSliceAtOrBefore(rawNifty, candleTime));
+      const vixValue = this.getValueAtOrBefore(rawVix, candleTime);
+      const analysis = this.analyze(
+        timestamps.slice(0, i + 1),
+        closes.slice(0, i + 1),
+        highs.slice(0, i + 1),
+        lows.slice(0, i + 1),
+        volumes.slice(0, i + 1),
+        closes[i],
+        trend15m,
+        niftyTrend,
+        prevDayData,
+        vixValue,
+        { timestamp: candleTime }
+      );
+
+      if (!analysis || !['BUY', 'SELL', 'STRONG BUY', 'STRONG SELL'].includes(analysis.overall)) continue;
+
+      const entryPrice = opens[i + 1] ?? closes[i + 1];
+      if (entryPrice == null) continue;
+      const setup = this.calcEntryExit(entryPrice, analysis.atr, analysis.overall, analysis.pivots);
+      if (!setup) continue;
+
+      const entryDay = this.getISTDayKey(timestamps[i + 1]);
+      let exitPrice = closes[i + 1] ?? entryPrice;
+      let exitReason = 'EOD';
+      let exitIndex = i + 1;
+
+      for (let j = i + 1; j < timestamps.length; j++) {
+        const dayKey = this.getISTDayKey(timestamps[j]);
+        if (dayKey !== entryDay) {
+          exitIndex = Math.max(i + 1, j - 1);
+          exitPrice = closes[exitIndex] ?? opens[exitIndex] ?? setup.entry;
+          exitReason = 'EOD';
+          break;
+        }
+
+        const candleHigh = highs[j] ?? closes[j];
+        const candleLow = lows[j] ?? closes[j];
+        const candleClose = closes[j] ?? opens[j] ?? setup.entry;
+        const timeState = this.checkTime(timestamps[j]);
+
+        if (setup.type === 'BUY') {
+          if (candleLow <= setup.sl) {
+            exitPrice = setup.sl;
+            exitReason = 'SL';
+            exitIndex = j;
+            break;
+          }
+          if (candleHigh >= setup.target2) {
+            exitPrice = setup.target2;
+            exitReason = 'TARGET';
+            exitIndex = j;
+            break;
+          }
+        } else {
+          if (candleHigh >= setup.sl) {
+            exitPrice = setup.sl;
+            exitReason = 'SL';
+            exitIndex = j;
+            break;
+          }
+          if (candleLow <= setup.target2) {
+            exitPrice = setup.target2;
+            exitReason = 'TARGET';
+            exitIndex = j;
+            break;
+          }
+        }
+
+        if (timeState.zone === 'LATE' || timeState.zone === 'CLOSE') {
+          exitPrice = candleClose;
+          exitReason = 'TIME';
+          exitIndex = j;
+          break;
+        }
+
+        exitPrice = candleClose;
+        exitIndex = j;
+      }
+
+      const grossPnl = setup.type === 'BUY' ? exitPrice - setup.entry : setup.entry - exitPrice;
+      const costs = this.calcTradingCosts(setup.entry, exitPrice, 1);
+      const netPnl = +(grossPnl - costs).toFixed(2);
+      equity += netPnl;
+      peak = Math.max(peak, equity);
+      maxDrawdown = Math.max(maxDrawdown, peak - equity);
+
+      trades.push({
+        side: setup.type,
+        setupName: analysis.setup.name,
+        entryTime: timestamps[i + 1],
+        exitTime: timestamps[exitIndex],
+        entry: +setup.entry.toFixed(2),
+        exit: +(+exitPrice).toFixed(2),
+        sl: setup.sl,
+        target: setup.target2,
+        confidence: analysis.confidence,
+        reason: exitReason,
+        grossPnl: +grossPnl.toFixed(2),
+        costs,
+        netPnl
+      });
+
+      i = exitIndex;
+    }
+
+    const sampleDays = new Set(timestamps.map(ts => this.getISTDayKey(ts))).size;
+    if (!trades.length) {
+      return {
+        summary: {
+          trades: 0, wins: 0, losses: 0, winRate: 0, grossPnl: 0, netPnl: 0, avgWin: 0, avgLoss: 0,
+          profitFactor: 0, expectancy: 0, maxDrawdown: 0, targetsHit: 0, stopsHit: 0, timedExits: 0,
+          longTrades: 0, shortTrades: 0, sampleDays
+        },
+        trades: []
+      };
+    }
+
+    const wins = trades.filter(t => t.netPnl > 0);
+    const losses = trades.filter(t => t.netPnl <= 0);
+    const grossProfit = wins.reduce((sum, trade) => sum + trade.netPnl, 0);
+    const grossLoss = losses.reduce((sum, trade) => sum + Math.abs(trade.netPnl), 0);
+
+    return {
+      summary: {
+        trades: trades.length,
+        wins: wins.length,
+        losses: losses.length,
+        winRate: +(wins.length / trades.length * 100).toFixed(1),
+        grossPnl: +trades.reduce((sum, trade) => sum + trade.grossPnl, 0).toFixed(2),
+        netPnl: +trades.reduce((sum, trade) => sum + trade.netPnl, 0).toFixed(2),
+        avgWin: +(wins.length ? wins.reduce((sum, trade) => sum + trade.netPnl, 0) / wins.length : 0).toFixed(2),
+        avgLoss: +(losses.length ? losses.reduce((sum, trade) => sum + trade.netPnl, 0) / losses.length : 0).toFixed(2),
+        profitFactor: +(grossLoss ? grossProfit / grossLoss : grossProfit).toFixed(2),
+        expectancy: +(trades.reduce((sum, trade) => sum + trade.netPnl, 0) / trades.length).toFixed(2),
+        maxDrawdown: +maxDrawdown.toFixed(2),
+        targetsHit: trades.filter(t => t.reason === 'TARGET').length,
+        stopsHit: trades.filter(t => t.reason === 'SL').length,
+        timedExits: trades.filter(t => t.reason === 'TIME' || t.reason === 'EOD').length,
+        longTrades: trades.filter(t => t.side === 'BUY').length,
+        shortTrades: trades.filter(t => t.side === 'SELL').length,
+        sampleDays
+      },
+      trades
+    };
   }
 };
 
@@ -481,7 +975,7 @@ const TradeLog = {
   KEY: 'stockpulse_tradelog',
   getAll() { try { return JSON.parse(localStorage.getItem(this.KEY)) || []; } catch { return []; } },
   save(l) { localStorage.setItem(this.KEY, JSON.stringify(l)); },
-  log(entry) { const all = this.getAll(); entry.timestamp = new Date().toISOString(); all.push(entry); if (all.length > 100) all.shift(); this.save(all); },
+  log(entry) { const all = this.getAll(); entry.timestamp = new Date().toISOString(); all.push(entry); if (all.length > 500) all.shift(); this.save(all); },
   getStats() {
     const all = this.getAll().filter(t => t.pnl !== undefined);
     if (!all.length) return null;
@@ -489,6 +983,10 @@ const TradeLog = {
     const totalPnl = all.reduce((a, t) => a + t.pnl, 0);
     const avgWin = wins.length ? wins.reduce((a, t) => a + t.pnl, 0) / wins.length : 0;
     const avgLoss = losses.length ? losses.reduce((a, t) => a + t.pnl, 0) / losses.length : 0;
-    return { total: all.length, wins: wins.length, losses: losses.length, winRate: (wins.length / all.length * 100).toFixed(1), totalPnl: totalPnl.toFixed(2), avgWin: avgWin.toFixed(2), avgLoss: avgLoss.toFixed(2) };
+    return { total: all.length, wins: wins.length, losses: losses.length, winRate: (wins.length / all.length * 100).toFixed(1), totalPnl: totalPnl.toFixed(2), avgWin: avgWin.toFixed(2), avgLoss: avgLoss.toFixed(2), logs: this.getAll() };
   }
 };
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { Trading, Positions, TradeLog };
+}

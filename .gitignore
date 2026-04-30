@@ -1,0 +1,9 @@
+node_modules/
+.env
+*.log
+patch.py
+patch.js
+patch2.js
+patch_final.js
+.next/
+out/

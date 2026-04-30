@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
 <title>StockPulse - Pro Trading Assistant</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
+<script src="https://unpkg.com/lightweight-charts@4.1.1/dist/lightweight-charts.standalone.production.js"></script>
+<link rel="stylesheet" href="styles.css?v=12">
 </head>
 <body>
 <div class="topbar">
@@ -22,6 +23,11 @@
 </div>
 
 <div class="container">
+  <div class="main-nav">
+    <button class="mn-btn active" onclick="switchAppView('chart')" id="navChart">Chart Analysis</button>
+    <button class="mn-btn" onclick="switchAppView('scanner')" id="navScanner">Top Opportunities</button>
+  </div>
+
   <div class="welcome" id="welcomeView">
     <h2>Professional Intraday Assistant</h2>
     <p>Filtered signals, dynamic stop loss, risk management, and multi-timeframe analysis</p>
@@ -37,6 +43,27 @@
 
   <div class="loading" id="loadingView"><div class="spinner"></div><p style="color:var(--text2);font-size:12px">Analyzing multi-timeframe data...</p></div>
   <div class="error-msg" id="errorView"></div>
+
+  <!-- SCANNER VIEW -->
+  <div class="scanner-view" id="scannerView" style="display:none;">
+    <div class="scanner-header">
+      <div class="sh-left">
+        <h2>Top Opportunities</h2>
+        <p>Auto-researching all sectors in the background...</p>
+      </div>
+      <div class="scanner-progress">Scanning: <span id="scanCurrent">--</span></div>
+    </div>
+    <div class="scanner-columns">
+      <div class="scan-col buys">
+        <h3><span class="dot green"></span> Top Buys</h3>
+        <div class="scan-list" id="scanBuysList"><div class="scan-empty">No strong buy signals yet...</div></div>
+      </div>
+      <div class="scan-col sells">
+        <h3><span class="dot red"></span> Top Sells</h3>
+        <div class="scan-list" id="scanSellsList"><div class="scan-empty">No strong sell signals yet...</div></div>
+      </div>
+    </div>
+  </div>
 
   <div class="stock-view" id="stockView">
     <!-- Price -->
@@ -63,8 +90,13 @@
     <!-- Chart -->
     <div class="chart-card">
       <div class="chart-toolbar">
-        <div class="range-tabs">
-          <button class="range-tab active" data-range="1d" data-interval="1m">1D</button>
+        <div class="range-tabs" id="timeframeTabs">
+          <button class="range-tab active" data-tf="1">1m</button>
+          <button class="range-tab" data-tf="2">2m</button>
+          <button class="range-tab" data-tf="3">3m</button>
+          <button class="range-tab" data-tf="5">5m</button>
+          <button class="range-tab" data-tf="10">10m</button>
+          <div class="tab-divider"></div>
           <button class="range-tab" data-range="5d" data-interval="5m">5D</button>
           <button class="range-tab" data-range="1mo" data-interval="15m">1M</button>
         </div>
@@ -73,7 +105,8 @@
           <button class="ct-btn" data-type="line">Line</button>
         </div>
       </div>
-      <canvas id="chartCanvas"></canvas>
+      <div id="tvChartContainer" style="width:100%;height:320px"></div>
+      <canvas id="chartCanvas" style="display:none"></canvas>
       <div class="ohlc-bar" id="ohlcBar"></div>
     </div>
 
@@ -116,7 +149,7 @@
   </div>
 </div>
 
-<script src="trading.js"></script>
-<script src="app.js"></script>
+<script src="trading.js?v=12"></script>
+<script src="app.js?v=12"></script>
 </body>
 </html>

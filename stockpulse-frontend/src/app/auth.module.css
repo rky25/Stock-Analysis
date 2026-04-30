@@ -1,0 +1,326 @@
+.authPage {
+  min-height: 100vh;
+  display: flex;
+  position: relative;
+  overflow: hidden;
+  background: var(--bg-primary);
+}
+
+.authLeft {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 40px;
+  position: relative;
+  z-index: 2;
+}
+
+.authRight {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  background: linear-gradient(135deg, rgba(41,98,255,0.05) 0%, rgba(0,188,212,0.03) 100%);
+  border-left: 1px solid var(--border);
+  position: relative;
+}
+
+.authOrbs {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.authOrb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+}
+
+.authOrb1 {
+  width: 300px;
+  height: 300px;
+  background: rgba(41, 98, 255, 0.12);
+  top: -10%;
+  right: -5%;
+}
+
+.authOrb2 {
+  width: 250px;
+  height: 250px;
+  background: rgba(0, 188, 212, 0.08);
+  bottom: -10%;
+  left: -5%;
+}
+
+.authFormWrap {
+  width: 100%;
+  max-width: 440px;
+  margin: 0 auto;
+}
+
+.authLogo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-heading);
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 40px;
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+.authLogoIcon {
+  width: 36px;
+  height: 36px;
+  background: var(--accent-gradient);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.authTitle {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.authSubtitle {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin-bottom: 32px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.formField {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.formField label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.formField input {
+  width: 100%;
+  padding: 13px 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  transition: all 0.15s;
+  outline: none;
+}
+
+.formField input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+.formField input::placeholder {
+  color: var(--text-muted);
+}
+
+.formRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.formRow label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.formRow a {
+  font-size: 0.85rem;
+  color: var(--accent-light);
+  font-weight: 500;
+}
+
+.formRow a:hover {
+  text-decoration: underline;
+}
+
+.submitBtn {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: var(--radius-full);
+  background: var(--accent-gradient);
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s;
+  box-shadow: 0 4px 15px var(--accent-glow);
+}
+
+.submitBtn:hover {
+  box-shadow: 0 6px 25px var(--accent-glow);
+  transform: translateY(-2px);
+}
+
+.dividerRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 4px 0;
+}
+
+.dividerLine {
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.dividerText {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.googleBtn {
+  width: 100%;
+  padding: 13px;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-light);
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.2s;
+}
+
+.googleBtn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.authFooter {
+  margin-top: 28px;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.authFooter a {
+  color: var(--accent-light);
+  font-weight: 600;
+}
+
+.authFooter a:hover {
+  text-decoration: underline;
+}
+
+/* Right panel content */
+.brandPanel {
+  text-align: center;
+  max-width: 400px;
+}
+
+.brandPanel h2 {
+  font-size: 1.8rem;
+  margin-bottom: 16px;
+}
+
+.brandPanel p {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+.featureList {
+  margin-top: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  text-align: left;
+}
+
+.featureItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.featureCheck {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(0, 200, 83, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--green);
+  flex-shrink: 0;
+}
+
+/* Password strength */
+.strengthBar {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--border);
+  margin-top: 6px;
+  overflow: hidden;
+}
+
+.strengthFill {
+  height: 100%;
+  border-radius: 2px;
+  transition: all 0.3s;
+}
+
+.strengthText {
+  font-size: 0.75rem;
+  margin-top: 4px;
+}
+
+@media (max-width: 900px) {
+  .authRight {
+    display: none;
+  }
+
+  .authLeft {
+    padding: 24px;
+  }
+
+  .authFormWrap {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .authLeft {
+    padding: 16px;
+  }
+
+  .authTitle {
+    font-size: 1.5rem;
+  }
+}

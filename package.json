@@ -1,0 +1,25 @@
+{
+  "name": "stock-analysis",
+  "version": "1.0.0",
+  "description": "**StockPulse** is an institutional-grade, real-time intraday trading terminal and AI-assisted decision engine. Designed for high-frequency day traders, it abstracts away complex technical analysis and provides clear, high-confluence entry and exit signals based on a multi-layered market intelligence architecture.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rky25/Stock-Analysis.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/rky25/Stock-Analysis/issues"
+  },
+  "homepage": "https://github.com/rky25/Stock-Analysis#readme",
+  "dependencies": {
+    "dotenv": "^17.4.2"
+  }
+}

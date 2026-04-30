@@ -53,11 +53,11 @@ class ProxyHandler(http.server.SimpleHTTPRequestHandler):
                 'details': error_body
             }).encode())
         except Exception as e:
-            self.send_response(500)
+            self.send_response(503)
             self.send_header('Content-Type', 'application/json')
             self.send_header('Access-Control-Allow-Origin', '*')
             self.end_headers()
-            self.wfile.write(json.dumps({'error': str(e)}).encode())
+            self.wfile.write(json.dumps({'error': 'Server unavailable - retrying', 'details': str(e)}).encode())
 
     def proxy_yahoo_search(self):
         """Proxy requests to Yahoo Finance search/quote API for autocomplete"""
@@ -99,11 +99,11 @@ class ProxyHandler(http.server.SimpleHTTPRequestHandler):
                 self.end_headers()
                 self.wfile.write(data)
         except Exception as e:
-            self.send_response(500)
+            self.send_response(503)
             self.send_header('Content-Type', 'application/json')
             self.send_header('Access-Control-Allow-Origin', '*')
             self.end_headers()
-            self.wfile.write(json.dumps({'error': str(e)}).encode())
+            self.wfile.write(json.dumps({'error': 'Server unavailable - retrying', 'details': str(e)}).encode())
 
     def log_message(self, format, *args):
         """Custom log format"""

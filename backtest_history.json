@@ -1,0 +1,2911 @@
+[
+  {
+    "summary": {
+      "timestamp": "2026-04-25T13:32:48.821Z",
+      "description": "Phase 1: Validate the Edge (60d sample with realistic NSE costs + 2bps slippage)",
+      "stocksTested": 20,
+      "maxSampleDays": 60,
+      "totalTrades": 2269,
+      "totalWins": 765,
+      "totalLosses": 1504,
+      "winRate": 33.7,
+      "totalGrossPnl": 4364.6,
+      "totalNetPnl": -5128.82,
+      "expectancyPerTrade": -2.26
+    },
+    "details": [
+      {
+        "symbol": "RELIANCE.NS",
+        "summary": {
+          "trades": 115,
+          "wins": 31,
+          "losses": 84,
+          "winRate": 27,
+          "grossPnl": -27.74,
+          "netPnl": -217.85,
+          "avgWin": 8.17,
+          "avgLoss": -5.61,
+          "profitFactor": 0.54,
+          "expectancy": -1.89,
+          "maxDrawdown": 234.04,
+          "targetsHit": 7,
+          "stopsHit": 61,
+          "timedExits": 47,
+          "longTrades": 51,
+          "shortTrades": 64,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "TCS.NS",
+        "summary": {
+          "trades": 117,
+          "wins": 40,
+          "losses": 77,
+          "winRate": 34.2,
+          "grossPnl": 141.92,
+          "netPnl": -341.56,
+          "avgWin": 17.38,
+          "avgLoss": -13.47,
+          "profitFactor": 0.67,
+          "expectancy": -2.92,
+          "maxDrawdown": 524.82,
+          "targetsHit": 12,
+          "stopsHit": 63,
+          "timedExits": 42,
+          "longTrades": 45,
+          "shortTrades": 72,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "HDFCBANK.NS",
+        "summary": {
+          "trades": 95,
+          "wins": 47,
+          "losses": 48,
+          "winRate": 49.5,
+          "grossPnl": 145.51,
+          "netPnl": 49.01,
+          "avgWin": 4.61,
+          "avgLoss": -3.49,
+          "profitFactor": 1.29,
+          "expectancy": 0.52,
+          "maxDrawdown": 40.86,
+          "targetsHit": 4,
+          "stopsHit": 40,
+          "timedExits": 51,
+          "longTrades": 40,
+          "shortTrades": 55,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "ICICIBANK.NS",
+        "summary": {
+          "trades": 118,
+          "wins": 40,
+          "losses": 78,
+          "winRate": 33.9,
+          "grossPnl": 62.12,
+          "netPnl": -125.2,
+          "avgWin": 7.32,
+          "avgLoss": -5.36,
+          "profitFactor": 0.7,
+          "expectancy": -1.06,
+          "maxDrawdown": 140.29,
+          "targetsHit": 6,
+          "stopsHit": 62,
+          "timedExits": 50,
+          "longTrades": 54,
+          "shortTrades": 64,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "INFY.NS",
+        "summary": {
+          "trades": 106,
+          "wins": 35,
+          "losses": 71,
+          "winRate": 33,
+          "grossPnl": 37.23,
+          "netPnl": -131.95,
+          "avgWin": 9.79,
+          "avgLoss": -6.68,
+          "profitFactor": 0.72,
+          "expectancy": -1.24,
+          "maxDrawdown": 223.98,
+          "targetsHit": 10,
+          "stopsHit": 52,
+          "timedExits": 44,
+          "longTrades": 42,
+          "shortTrades": 64,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "SBIN.NS",
+        "summary": {
+          "trades": 112,
+          "wins": 38,
+          "losses": 74,
+          "winRate": 33.9,
+          "grossPnl": 32.66,
+          "netPnl": -114.53,
+          "avgWin": 6.11,
+          "avgLoss": -4.69,
+          "profitFactor": 0.67,
+          "expectancy": -1.02,
+          "maxDrawdown": 143.32,
+          "targetsHit": 8,
+          "stopsHit": 55,
+          "timedExits": 49,
+          "longTrades": 60,
+          "shortTrades": 52,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "BHARTIARTL.NS",
+        "summary": {
+          "trades": 118,
+          "wins": 32,
+          "losses": 86,
+          "winRate": 27.1,
+          "grossPnl": -65.4,
+          "netPnl": -359.1,
+          "avgWin": 11.79,
+          "avgLoss": -8.56,
+          "profitFactor": 0.51,
+          "expectancy": -3.04,
+          "maxDrawdown": 399.48,
+          "targetsHit": 5,
+          "stopsHit": 74,
+          "timedExits": 39,
+          "longTrades": 55,
+          "shortTrades": 63,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "ITC.NS",
+        "summary": {
+          "trades": 116,
+          "wins": 37,
+          "losses": 79,
+          "winRate": 31.9,
+          "grossPnl": 24.15,
+          "netPnl": -18.72,
+          "avgWin": 1.94,
+          "avgLoss": -1.15,
+          "profitFactor": 0.79,
+          "expectancy": -0.16,
+          "maxDrawdown": 27,
+          "targetsHit": 13,
+          "stopsHit": 65,
+          "timedExits": 38,
+          "longTrades": 52,
+          "shortTrades": 64,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "HINDUNILVR.NS",
+        "summary": {
+          "trades": 140,
+          "wins": 39,
+          "losses": 101,
+          "winRate": 27.9,
+          "grossPnl": 104.31,
+          "netPnl": -411.86,
+          "avgWin": 16.09,
+          "avgLoss": -10.29,
+          "profitFactor": 0.6,
+          "expectancy": -2.94,
+          "maxDrawdown": 501.01,
+          "targetsHit": 10,
+          "stopsHit": 80,
+          "timedExits": 50,
+          "longTrades": 71,
+          "shortTrades": 69,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "LT.NS",
+        "summary": {
+          "trades": 129,
+          "wins": 45,
+          "losses": 84,
+          "winRate": 34.9,
+          "grossPnl": 622.25,
+          "netPnl": -112.92,
+          "avgWin": 30.68,
+          "avgLoss": -17.78,
+          "profitFactor": 0.92,
+          "expectancy": -0.88,
+          "maxDrawdown": 470.42,
+          "targetsHit": 18,
+          "stopsHit": 65,
+          "timedExits": 46,
+          "longTrades": 69,
+          "shortTrades": 60,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "BAJFINANCE.NS",
+        "summary": {
+          "trades": 131,
+          "wins": 41,
+          "losses": 90,
+          "winRate": 31.3,
+          "grossPnl": 19.84,
+          "netPnl": -124.91,
+          "avgWin": 7.28,
+          "avgLoss": -4.7,
+          "profitFactor": 0.7,
+          "expectancy": -0.95,
+          "maxDrawdown": 194.62,
+          "targetsHit": 13,
+          "stopsHit": 70,
+          "timedExits": 48,
+          "longTrades": 64,
+          "shortTrades": 67,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "AXISBANK.NS",
+        "summary": {
+          "trades": 121,
+          "wins": 46,
+          "losses": 75,
+          "winRate": 38,
+          "grossPnl": 139.79,
+          "netPnl": -48.4,
+          "avgWin": 8.67,
+          "avgLoss": -5.96,
+          "profitFactor": 0.89,
+          "expectancy": -0.4,
+          "maxDrawdown": 135.57,
+          "targetsHit": 11,
+          "stopsHit": 61,
+          "timedExits": 49,
+          "longTrades": 60,
+          "shortTrades": 61,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "KOTAKBANK.NS",
+        "summary": {
+          "trades": 129,
+          "wins": 50,
+          "losses": 79,
+          "winRate": 38.8,
+          "grossPnl": 27.29,
+          "netPnl": -33.52,
+          "avgWin": 2.06,
+          "avgLoss": -1.73,
+          "profitFactor": 0.75,
+          "expectancy": -0.26,
+          "maxDrawdown": 44.83,
+          "targetsHit": 11,
+          "stopsHit": 64,
+          "timedExits": 54,
+          "longTrades": 57,
+          "shortTrades": 72,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "MARUTI.NS",
+        "summary": {
+          "trades": 114,
+          "wins": 44,
+          "losses": 70,
+          "winRate": 38.6,
+          "grossPnl": 1530.32,
+          "netPnl": -769.08,
+          "avgWin": 91.08,
+          "avgLoss": -68.24,
+          "profitFactor": 0.84,
+          "expectancy": -6.75,
+          "maxDrawdown": 1487.85,
+          "targetsHit": 9,
+          "stopsHit": 56,
+          "timedExits": 49,
+          "longTrades": 55,
+          "shortTrades": 59,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "SUNPHARMA.NS",
+        "summary": {
+          "trades": 111,
+          "wins": 33,
+          "losses": 78,
+          "winRate": 29.7,
+          "grossPnl": -37.53,
+          "netPnl": -263.99,
+          "avgWin": 8.27,
+          "avgLoss": -6.88,
+          "profitFactor": 0.51,
+          "expectancy": -2.38,
+          "maxDrawdown": 300.97,
+          "targetsHit": 6,
+          "stopsHit": 63,
+          "timedExits": 42,
+          "longTrades": 65,
+          "shortTrades": 46,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "TITAN.NS",
+        "summary": {
+          "trades": 131,
+          "wins": 43,
+          "losses": 88,
+          "winRate": 32.8,
+          "grossPnl": 299.29,
+          "netPnl": -486.04,
+          "avgWin": 31.77,
+          "avgLoss": -21.05,
+          "profitFactor": 0.74,
+          "expectancy": -3.71,
+          "maxDrawdown": 562.37,
+          "targetsHit": 11,
+          "stopsHit": 73,
+          "timedExits": 47,
+          "longTrades": 60,
+          "shortTrades": 71,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "ASIANPAINT.NS",
+        "summary": {
+          "trades": 118,
+          "wins": 42,
+          "losses": 76,
+          "winRate": 35.6,
+          "grossPnl": 224.52,
+          "netPnl": -221.96,
+          "avgWin": 16.17,
+          "avgLoss": -11.86,
+          "profitFactor": 0.75,
+          "expectancy": -1.88,
+          "maxDrawdown": 420.47,
+          "targetsHit": 8,
+          "stopsHit": 58,
+          "timedExits": 52,
+          "longTrades": 57,
+          "shortTrades": 61,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "ULTRACEMCO.NS",
+        "summary": {
+          "trades": 132,
+          "wins": 42,
+          "losses": 90,
+          "winRate": 31.8,
+          "grossPnl": 1050.53,
+          "netPnl": -1230.23,
+          "avgWin": 77.78,
+          "avgLoss": -49.97,
+          "profitFactor": 0.73,
+          "expectancy": -9.32,
+          "maxDrawdown": 1332.86,
+          "targetsHit": 13,
+          "stopsHit": 72,
+          "timedExits": 47,
+          "longTrades": 69,
+          "shortTrades": 63,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "HCLTECH.NS",
+        "summary": {
+          "trades": 116,
+          "wins": 40,
+          "losses": 76,
+          "winRate": 34.5,
+          "grossPnl": 33.54,
+          "netPnl": -166.01,
+          "avgWin": 9.02,
+          "avgLoss": -6.93,
+          "profitFactor": 0.68,
+          "expectancy": -1.43,
+          "maxDrawdown": 235.03,
+          "targetsHit": 9,
+          "stopsHit": 61,
+          "timedExits": 46,
+          "longTrades": 48,
+          "shortTrades": 68,
+          "sampleDays": 60
+        }
+      }
+    ]
+  },
+  {
+    "summary": {
+      "timestamp": "2026-04-25T13:40:08.522Z",
+      "description": "Phase 1: Validate the Edge (60d sample with realistic NSE costs + 2bps slippage)",
+      "stocksTested": 20,
+      "maxSampleDays": 60,
+      "totalTrades": 2269,
+      "totalWins": 765,
+      "totalLosses": 1504,
+      "winRate": 33.7,
+      "totalGrossPnl": 4364.6,
+      "totalNetPnl": -5128.82,
+      "expectancyPerTrade": -2.26
+    },
+    "details": [
+      {
+        "symbol": "RELIANCE.NS",
+        "summary": {
+          "trades": 115,
+          "wins": 31,
+          "losses": 84,
+          "winRate": 27,
+          "grossPnl": -27.74,
+          "netPnl": -217.85,
+          "avgWin": 8.17,
+          "avgLoss": -5.61,
+          "profitFactor": 0.54,
+          "expectancy": -1.89,
+          "maxDrawdown": 234.04,
+          "targetsHit": 7,
+          "stopsHit": 61,
+          "timedExits": 47,
+          "longTrades": 51,
+          "shortTrades": 64,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "TCS.NS",
+        "summary": {
+          "trades": 117,
+          "wins": 40,
+          "losses": 77,
+          "winRate": 34.2,
+          "grossPnl": 141.92,
+          "netPnl": -341.56,
+          "avgWin": 17.38,
+          "avgLoss": -13.47,
+          "profitFactor": 0.67,
+          "expectancy": -2.92,
+          "maxDrawdown": 524.82,
+          "targetsHit": 12,
+          "stopsHit": 63,
+          "timedExits": 42,
+          "longTrades": 45,
+          "shortTrades": 72,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "HDFCBANK.NS",
+        "summary": {
+          "trades": 95,
+          "wins": 47,
+          "losses": 48,
+          "winRate": 49.5,
+          "grossPnl": 145.51,
+          "netPnl": 49.01,
+          "avgWin": 4.61,
+          "avgLoss": -3.49,
+          "profitFactor": 1.29,
+          "expectancy": 0.52,
+          "maxDrawdown": 40.86,
+          "targetsHit": 4,
+          "stopsHit": 40,
+          "timedExits": 51,
+          "longTrades": 40,
+          "shortTrades": 55,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "ICICIBANK.NS",
+        "summary": {
+          "trades": 118,
+          "wins": 40,
+          "losses": 78,
+          "winRate": 33.9,
+          "grossPnl": 62.12,
+          "netPnl": -125.2,
+          "avgWin": 7.32,
+          "avgLoss": -5.36,
+          "profitFactor": 0.7,
+          "expectancy": -1.06,
+          "maxDrawdown": 140.29,
+          "targetsHit": 6,
+          "stopsHit": 62,
+          "timedExits": 50,
+          "longTrades": 54,
+          "shortTrades": 64,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "INFY.NS",
+        "summary": {
+          "trades": 106,
+          "wins": 35,
+          "losses": 71,
+          "winRate": 33,
+          "grossPnl": 37.23,
+          "netPnl": -131.95,
+          "avgWin": 9.79,
+          "avgLoss": -6.68,
+          "profitFactor": 0.72,
+          "expectancy": -1.24,
+          "maxDrawdown": 223.98,
+          "targetsHit": 10,
+          "stopsHit": 52,
+          "timedExits": 44,
+          "longTrades": 42,
+          "shortTrades": 64,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "SBIN.NS",
+        "summary": {
+          "trades": 112,
+          "wins": 38,
+          "losses": 74,
+          "winRate": 33.9,
+          "grossPnl": 32.66,
+          "netPnl": -114.53,
+          "avgWin": 6.11,
+          "avgLoss": -4.69,
+          "profitFactor": 0.67,
+          "expectancy": -1.02,
+          "maxDrawdown": 143.32,
+          "targetsHit": 8,
+          "stopsHit": 55,
+          "timedExits": 49,
+          "longTrades": 60,
+          "shortTrades": 52,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "BHARTIARTL.NS",
+        "summary": {
+          "trades": 118,
+          "wins": 32,
+          "losses": 86,
+          "winRate": 27.1,
+          "grossPnl": -65.4,
+          "netPnl": -359.1,
+          "avgWin": 11.79,
+          "avgLoss": -8.56,
+          "profitFactor": 0.51,
+          "expectancy": -3.04,
+          "maxDrawdown": 399.48,
+          "targetsHit": 5,
+          "stopsHit": 74,
+          "timedExits": 39,
+          "longTrades": 55,
+          "shortTrades": 63,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "ITC.NS",
+        "summary": {
+          "trades": 116,
+          "wins": 37,
+          "losses": 79,
+          "winRate": 31.9,
+          "grossPnl": 24.15,
+          "netPnl": -18.72,
+          "avgWin": 1.94,
+          "avgLoss": -1.15,
+          "profitFactor": 0.79,
+          "expectancy": -0.16,
+          "maxDrawdown": 27,
+          "targetsHit": 13,
+          "stopsHit": 65,
+          "timedExits": 38,
+          "longTrades": 52,
+          "shortTrades": 64,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "HINDUNILVR.NS",
+        "summary": {
+          "trades": 140,
+          "wins": 39,
+          "losses": 101,
+          "winRate": 27.9,
+          "grossPnl": 104.31,
+          "netPnl": -411.86,
+          "avgWin": 16.09,
+          "avgLoss": -10.29,
+          "profitFactor": 0.6,
+          "expectancy": -2.94,
+          "maxDrawdown": 501.01,
+          "targetsHit": 10,
+          "stopsHit": 80,
+          "timedExits": 50,
+          "longTrades": 71,
+          "shortTrades": 69,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "LT.NS",
+        "summary": {
+          "trades": 129,
+          "wins": 45,
+          "losses": 84,
+          "winRate": 34.9,
+          "grossPnl": 622.25,
+          "netPnl": -112.92,
+          "avgWin": 30.68,
+          "avgLoss": -17.78,
+          "profitFactor": 0.92,
+          "expectancy": -0.88,
+          "maxDrawdown": 470.42,
+          "targetsHit": 18,
+          "stopsHit": 65,
+          "timedExits": 46,
+          "longTrades": 69,
+          "shortTrades": 60,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "BAJFINANCE.NS",
+        "summary": {
+          "trades": 131,
+          "wins": 41,
+          "losses": 90,
+          "winRate": 31.3,
+          "grossPnl": 19.84,
+          "netPnl": -124.91,
+          "avgWin": 7.28,
+          "avgLoss": -4.7,
+          "profitFactor": 0.7,
+          "expectancy": -0.95,
+          "maxDrawdown": 194.62,
+          "targetsHit": 13,
+          "stopsHit": 70,
+          "timedExits": 48,
+          "longTrades": 64,
+          "shortTrades": 67,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "AXISBANK.NS",
+        "summary": {
+          "trades": 121,
+          "wins": 46,
+          "losses": 75,
+          "winRate": 38,
+          "grossPnl": 139.79,
+          "netPnl": -48.4,
+          "avgWin": 8.67,
+          "avgLoss": -5.96,
+          "profitFactor": 0.89,
+          "expectancy": -0.4,
+          "maxDrawdown": 135.57,
+          "targetsHit": 11,
+          "stopsHit": 61,
+          "timedExits": 49,
+          "longTrades": 60,
+          "shortTrades": 61,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "KOTAKBANK.NS",
+        "summary": {
+          "trades": 129,
+          "wins": 50,
+          "losses": 79,
+          "winRate": 38.8,
+          "grossPnl": 27.29,
+          "netPnl": -33.52,
+          "avgWin": 2.06,
+          "avgLoss": -1.73,
+          "profitFactor": 0.75,
+          "expectancy": -0.26,
+          "maxDrawdown": 44.83,
+          "targetsHit": 11,
+          "stopsHit": 64,
+          "timedExits": 54,
+          "longTrades": 57,
+          "shortTrades": 72,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "MARUTI.NS",
+        "summary": {
+          "trades": 114,
+          "wins": 44,
+          "losses": 70,
+          "winRate": 38.6,
+          "grossPnl": 1530.32,
+          "netPnl": -769.08,
+          "avgWin": 91.08,
+          "avgLoss": -68.24,
+          "profitFactor": 0.84,
+          "expectancy": -6.75,
+          "maxDrawdown": 1487.85,
+          "targetsHit": 9,
+          "stopsHit": 56,
+          "timedExits": 49,
+          "longTrades": 55,
+          "shortTrades": 59,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "SUNPHARMA.NS",
+        "summary": {
+          "trades": 111,
+          "wins": 33,
+          "losses": 78,
+          "winRate": 29.7,
+          "grossPnl": -37.53,
+          "netPnl": -263.99,
+          "avgWin": 8.27,
+          "avgLoss": -6.88,
+          "profitFactor": 0.51,
+          "expectancy": -2.38,
+          "maxDrawdown": 300.97,
+          "targetsHit": 6,
+          "stopsHit": 63,
+          "timedExits": 42,
+          "longTrades": 65,
+          "shortTrades": 46,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "TITAN.NS",
+        "summary": {
+          "trades": 131,
+          "wins": 43,
+          "losses": 88,
+          "winRate": 32.8,
+          "grossPnl": 299.29,
+          "netPnl": -486.04,
+          "avgWin": 31.77,
+          "avgLoss": -21.05,
+          "profitFactor": 0.74,
+          "expectancy": -3.71,
+          "maxDrawdown": 562.37,
+          "targetsHit": 11,
+          "stopsHit": 73,
+          "timedExits": 47,
+          "longTrades": 60,
+          "shortTrades": 71,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "ASIANPAINT.NS",
+        "summary": {
+          "trades": 118,
+          "wins": 42,
+          "losses": 76,
+          "winRate": 35.6,
+          "grossPnl": 224.52,
+          "netPnl": -221.96,
+          "avgWin": 16.17,
+          "avgLoss": -11.86,
+          "profitFactor": 0.75,
+          "expectancy": -1.88,
+          "maxDrawdown": 420.47,
+          "targetsHit": 8,
+          "stopsHit": 58,
+          "timedExits": 52,
+          "longTrades": 57,
+          "shortTrades": 61,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "ULTRACEMCO.NS",
+        "summary": {
+          "trades": 132,
+          "wins": 42,
+          "losses": 90,
+          "winRate": 31.8,
+          "grossPnl": 1050.53,
+          "netPnl": -1230.23,
+          "avgWin": 77.78,
+          "avgLoss": -49.97,
+          "profitFactor": 0.73,
+          "expectancy": -9.32,
+          "maxDrawdown": 1332.86,
+          "targetsHit": 13,
+          "stopsHit": 72,
+          "timedExits": 47,
+          "longTrades": 69,
+          "shortTrades": 63,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "HCLTECH.NS",
+        "summary": {
+          "trades": 116,
+          "wins": 40,
+          "losses": 76,
+          "winRate": 34.5,
+          "grossPnl": 33.54,
+          "netPnl": -166.01,
+          "avgWin": 9.02,
+          "avgLoss": -6.93,
+          "profitFactor": 0.68,
+          "expectancy": -1.43,
+          "maxDrawdown": 235.03,
+          "targetsHit": 9,
+          "stopsHit": 61,
+          "timedExits": 46,
+          "longTrades": 48,
+          "shortTrades": 68,
+          "sampleDays": 60
+        }
+      }
+    ]
+  },
+  {
+    "summary": {
+      "timestamp": "2026-04-25T14:06:09.631Z",
+      "description": "Phase 1: Validate the Edge (60d sample with realistic NSE costs + 2bps slippage)",
+      "stocksTested": 20,
+      "maxSampleDays": 60,
+      "totalTrades": 2269,
+      "totalWins": 765,
+      "totalLosses": 1504,
+      "winRate": 33.7,
+      "totalGrossPnl": 4364.6,
+      "totalNetPnl": -5128.82,
+      "expectancyPerTrade": -2.26,
+      "setupStats": {
+        "Breakdown Watch": {
+          "trades": 600,
+          "wins": 201,
+          "netPnl": -783.6
+        },
+        "Breakout Watch": {
+          "trades": 565,
+          "wins": 195,
+          "netPnl": -323.4200000000009
+        },
+        "Trend Pullback Long": {
+          "trades": 196,
+          "wins": 63,
+          "netPnl": -1111.5499999999997
+        },
+        "Trend Continuation Short": {
+          "trades": 282,
+          "wins": 85,
+          "netPnl": -1080.8900000000003
+        },
+        "Trend Pullback Short": {
+          "trades": 271,
+          "wins": 98,
+          "netPnl": -435.37
+        },
+        "Trend Continuation Long": {
+          "trades": 213,
+          "wins": 79,
+          "netPnl": -324.43999999999994
+        },
+        "Resistance Reversal": {
+          "trades": 42,
+          "wins": 13,
+          "netPnl": -256.02
+        },
+        "Support Reversal": {
+          "trades": 100,
+          "wins": 31,
+          "netPnl": -813.5299999999999
+        }
+      }
+    },
+    "details": [
+      {
+        "symbol": "RELIANCE.NS",
+        "summary": {
+          "trades": 115,
+          "wins": 31,
+          "losses": 84,
+          "winRate": 27,
+          "grossPnl": -27.74,
+          "netPnl": -217.85,
+          "avgWin": 8.17,
+          "avgLoss": -5.61,
+          "profitFactor": 0.54,
+          "expectancy": -1.89,
+          "maxDrawdown": 234.04,
+          "targetsHit": 7,
+          "stopsHit": 61,
+          "timedExits": 47,
+          "longTrades": 51,
+          "shortTrades": 64,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "TCS.NS",
+        "summary": {
+          "trades": 117,
+          "wins": 40,
+          "losses": 77,
+          "winRate": 34.2,
+          "grossPnl": 141.92,
+          "netPnl": -341.56,
+          "avgWin": 17.38,
+          "avgLoss": -13.47,
+          "profitFactor": 0.67,
+          "expectancy": -2.92,
+          "maxDrawdown": 524.82,
+          "targetsHit": 12,
+          "stopsHit": 63,
+          "timedExits": 42,
+          "longTrades": 45,
+          "shortTrades": 72,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "HDFCBANK.NS",
+        "summary": {
+          "trades": 95,
+          "wins": 47,
+          "losses": 48,
+          "winRate": 49.5,
+          "grossPnl": 145.51,
+          "netPnl": 49.01,
+          "avgWin": 4.61,
+          "avgLoss": -3.49,
+          "profitFactor": 1.29,
+          "expectancy": 0.52,
+          "maxDrawdown": 40.86,
+          "targetsHit": 4,
+          "stopsHit": 40,
+          "timedExits": 51,
+          "longTrades": 40,
+          "shortTrades": 55,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "ICICIBANK.NS",
+        "summary": {
+          "trades": 118,
+          "wins": 40,
+          "losses": 78,
+          "winRate": 33.9,
+          "grossPnl": 62.12,
+          "netPnl": -125.2,
+          "avgWin": 7.32,
+          "avgLoss": -5.36,
+          "profitFactor": 0.7,
+          "expectancy": -1.06,
+          "maxDrawdown": 140.29,
+          "targetsHit": 6,
+          "stopsHit": 62,
+          "timedExits": 50,
+          "longTrades": 54,
+          "shortTrades": 64,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "INFY.NS",
+        "summary": {
+          "trades": 106,
+          "wins": 35,
+          "losses": 71,
+          "winRate": 33,
+          "grossPnl": 37.23,
+          "netPnl": -131.95,
+          "avgWin": 9.79,
+          "avgLoss": -6.68,
+          "profitFactor": 0.72,
+          "expectancy": -1.24,
+          "maxDrawdown": 223.98,
+          "targetsHit": 10,
+          "stopsHit": 52,
+          "timedExits": 44,
+          "longTrades": 42,
+          "shortTrades": 64,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "SBIN.NS",
+        "summary": {
+          "trades": 112,
+          "wins": 38,
+          "losses": 74,
+          "winRate": 33.9,
+          "grossPnl": 32.66,
+          "netPnl": -114.53,
+          "avgWin": 6.11,
+          "avgLoss": -4.69,
+          "profitFactor": 0.67,
+          "expectancy": -1.02,
+          "maxDrawdown": 143.32,
+          "targetsHit": 8,
+          "stopsHit": 55,
+          "timedExits": 49,
+          "longTrades": 60,
+          "shortTrades": 52,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "BHARTIARTL.NS",
+        "summary": {
+          "trades": 118,
+          "wins": 32,
+          "losses": 86,
+          "winRate": 27.1,
+          "grossPnl": -65.4,
+          "netPnl": -359.1,
+          "avgWin": 11.79,
+          "avgLoss": -8.56,
+          "profitFactor": 0.51,
+          "expectancy": -3.04,
+          "maxDrawdown": 399.48,
+          "targetsHit": 5,
+          "stopsHit": 74,
+          "timedExits": 39,
+          "longTrades": 55,
+          "shortTrades": 63,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "ITC.NS",
+        "summary": {
+          "trades": 116,
+          "wins": 37,
+          "losses": 79,
+          "winRate": 31.9,
+          "grossPnl": 24.15,
+          "netPnl": -18.72,
+          "avgWin": 1.94,
+          "avgLoss": -1.15,
+          "profitFactor": 0.79,
+          "expectancy": -0.16,
+          "maxDrawdown": 27,
+          "targetsHit": 13,
+          "stopsHit": 65,
+          "timedExits": 38,
+          "longTrades": 52,
+          "shortTrades": 64,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "HINDUNILVR.NS",
+        "summary": {
+          "trades": 140,
+          "wins": 39,
+          "losses": 101,
+          "winRate": 27.9,
+          "grossPnl": 104.31,
+          "netPnl": -411.86,
+          "avgWin": 16.09,
+          "avgLoss": -10.29,
+          "profitFactor": 0.6,
+          "expectancy": -2.94,
+          "maxDrawdown": 501.01,
+          "targetsHit": 10,
+          "stopsHit": 80,
+          "timedExits": 50,
+          "longTrades": 71,
+          "shortTrades": 69,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "LT.NS",
+        "summary": {
+          "trades": 129,
+          "wins": 45,
+          "losses": 84,
+          "winRate": 34.9,
+          "grossPnl": 622.25,
+          "netPnl": -112.92,
+          "avgWin": 30.68,
+          "avgLoss": -17.78,
+          "profitFactor": 0.92,
+          "expectancy": -0.88,
+          "maxDrawdown": 470.42,
+          "targetsHit": 18,
+          "stopsHit": 65,
+          "timedExits": 46,
+          "longTrades": 69,
+          "shortTrades": 60,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "BAJFINANCE.NS",
+        "summary": {
+          "trades": 131,
+          "wins": 41,
+          "losses": 90,
+          "winRate": 31.3,
+          "grossPnl": 19.84,
+          "netPnl": -124.91,
+          "avgWin": 7.28,
+          "avgLoss": -4.7,
+          "profitFactor": 0.7,
+          "expectancy": -0.95,
+          "maxDrawdown": 194.62,
+          "targetsHit": 13,
+          "stopsHit": 70,
+          "timedExits": 48,
+          "longTrades": 64,
+          "shortTrades": 67,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "AXISBANK.NS",
+        "summary": {
+          "trades": 121,
+          "wins": 46,
+          "losses": 75,
+          "winRate": 38,
+          "grossPnl": 139.79,
+          "netPnl": -48.4,
+          "avgWin": 8.67,
+          "avgLoss": -5.96,
+          "profitFactor": 0.89,
+          "expectancy": -0.4,
+          "maxDrawdown": 135.57,
+          "targetsHit": 11,
+          "stopsHit": 61,
+          "timedExits": 49,
+          "longTrades": 60,
+          "shortTrades": 61,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "KOTAKBANK.NS",
+        "summary": {
+          "trades": 129,
+          "wins": 50,
+          "losses": 79,
+          "winRate": 38.8,
+          "grossPnl": 27.29,
+          "netPnl": -33.52,
+          "avgWin": 2.06,
+          "avgLoss": -1.73,
+          "profitFactor": 0.75,
+          "expectancy": -0.26,
+          "maxDrawdown": 44.83,
+          "targetsHit": 11,
+          "stopsHit": 64,
+          "timedExits": 54,
+          "longTrades": 57,
+          "shortTrades": 72,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "MARUTI.NS",
+        "summary": {
+          "trades": 114,
+          "wins": 44,
+          "losses": 70,
+          "winRate": 38.6,
+          "grossPnl": 1530.32,
+          "netPnl": -769.08,
+          "avgWin": 91.08,
+          "avgLoss": -68.24,
+          "profitFactor": 0.84,
+          "expectancy": -6.75,
+          "maxDrawdown": 1487.85,
+          "targetsHit": 9,
+          "stopsHit": 56,
+          "timedExits": 49,
+          "longTrades": 55,
+          "shortTrades": 59,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "SUNPHARMA.NS",
+        "summary": {
+          "trades": 111,
+          "wins": 33,
+          "losses": 78,
+          "winRate": 29.7,
+          "grossPnl": -37.53,
+          "netPnl": -263.99,
+          "avgWin": 8.27,
+          "avgLoss": -6.88,
+          "profitFactor": 0.51,
+          "expectancy": -2.38,
+          "maxDrawdown": 300.97,
+          "targetsHit": 6,
+          "stopsHit": 63,
+          "timedExits": 42,
+          "longTrades": 65,
+          "shortTrades": 46,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "TITAN.NS",
+        "summary": {
+          "trades": 131,
+          "wins": 43,
+          "losses": 88,
+          "winRate": 32.8,
+          "grossPnl": 299.29,
+          "netPnl": -486.04,
+          "avgWin": 31.77,
+          "avgLoss": -21.05,
+          "profitFactor": 0.74,
+          "expectancy": -3.71,
+          "maxDrawdown": 562.37,
+          "targetsHit": 11,
+          "stopsHit": 73,
+          "timedExits": 47,
+          "longTrades": 60,
+          "shortTrades": 71,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "ASIANPAINT.NS",
+        "summary": {
+          "trades": 118,
+          "wins": 42,
+          "losses": 76,
+          "winRate": 35.6,
+          "grossPnl": 224.52,
+          "netPnl": -221.96,
+          "avgWin": 16.17,
+          "avgLoss": -11.86,
+          "profitFactor": 0.75,
+          "expectancy": -1.88,
+          "maxDrawdown": 420.47,
+          "targetsHit": 8,
+          "stopsHit": 58,
+          "timedExits": 52,
+          "longTrades": 57,
+          "shortTrades": 61,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "ULTRACEMCO.NS",
+        "summary": {
+          "trades": 132,
+          "wins": 42,
+          "losses": 90,
+          "winRate": 31.8,
+          "grossPnl": 1050.53,
+          "netPnl": -1230.23,
+          "avgWin": 77.78,
+          "avgLoss": -49.97,
+          "profitFactor": 0.73,
+          "expectancy": -9.32,
+          "maxDrawdown": 1332.86,
+          "targetsHit": 13,
+          "stopsHit": 72,
+          "timedExits": 47,
+          "longTrades": 69,
+          "shortTrades": 63,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "HCLTECH.NS",
+        "summary": {
+          "trades": 116,
+          "wins": 40,
+          "losses": 76,
+          "winRate": 34.5,
+          "grossPnl": 33.54,
+          "netPnl": -166.01,
+          "avgWin": 9.02,
+          "avgLoss": -6.93,
+          "profitFactor": 0.68,
+          "expectancy": -1.43,
+          "maxDrawdown": 235.03,
+          "targetsHit": 9,
+          "stopsHit": 61,
+          "timedExits": 46,
+          "longTrades": 48,
+          "shortTrades": 68,
+          "sampleDays": 60
+        }
+      }
+    ]
+  },
+  {
+    "summary": {
+      "timestamp": "2026-04-25T14:10:37.314Z",
+      "description": "Phase 1: Validate the Edge (60d sample with realistic NSE costs + 2bps slippage)",
+      "stocksTested": 20,
+      "maxSampleDays": 60,
+      "totalTrades": 1288,
+      "totalWins": 420,
+      "totalLosses": 868,
+      "winRate": 32.6,
+      "totalGrossPnl": 938.84,
+      "totalNetPnl": -4484.71,
+      "expectancyPerTrade": -3.48,
+      "setupStats": {
+        "Trend Pullback Long": {
+          "trades": 153,
+          "wins": 52,
+          "netPnl": -557.9899999999999
+        },
+        "Trend Continuation Short": {
+          "trades": 227,
+          "wins": 67,
+          "netPnl": -977.96
+        },
+        "Breakdown Watch": {
+          "trades": 283,
+          "wins": 92,
+          "netPnl": -884.0499999999998
+        },
+        "Breakout Watch": {
+          "trades": 263,
+          "wins": 86,
+          "netPnl": -1068.44
+        },
+        "Trend Continuation Long": {
+          "trades": 153,
+          "wins": 50,
+          "netPnl": -363.88
+        },
+        "Trend Pullback Short": {
+          "trades": 209,
+          "wins": 73,
+          "netPnl": -632.3899999999998
+        }
+      }
+    },
+    "details": [
+      {
+        "symbol": "RELIANCE.NS",
+        "summary": {
+          "trades": 67,
+          "wins": 17,
+          "losses": 50,
+          "winRate": 25.4,
+          "grossPnl": -63.98,
+          "netPnl": -174.7,
+          "avgWin": 5.59,
+          "avgLoss": -5.39,
+          "profitFactor": 0.35,
+          "expectancy": -2.61,
+          "maxDrawdown": 185.62,
+          "targetsHit": 1,
+          "stopsHit": 39,
+          "timedExits": 27,
+          "longTrades": 28,
+          "shortTrades": 39,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "TCS.NS",
+        "summary": {
+          "trades": 65,
+          "wins": 17,
+          "losses": 48,
+          "winRate": 26.2,
+          "grossPnl": -25.34,
+          "netPnl": -293.98,
+          "avgWin": 15.84,
+          "avgLoss": -11.73,
+          "profitFactor": 0.48,
+          "expectancy": -4.52,
+          "maxDrawdown": 355.53,
+          "targetsHit": 5,
+          "stopsHit": 35,
+          "timedExits": 25,
+          "longTrades": 22,
+          "shortTrades": 43,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "HDFCBANK.NS",
+        "summary": {
+          "trades": 58,
+          "wins": 17,
+          "losses": 41,
+          "winRate": 29.3,
+          "grossPnl": 32.85,
+          "netPnl": -25.84,
+          "avgWin": 5.37,
+          "avgLoss": -2.86,
+          "profitFactor": 0.78,
+          "expectancy": -0.45,
+          "maxDrawdown": 44.01,
+          "targetsHit": 4,
+          "stopsHit": 29,
+          "timedExits": 25,
+          "longTrades": 21,
+          "shortTrades": 37,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "ICICIBANK.NS",
+        "summary": {
+          "trades": 71,
+          "wins": 27,
+          "losses": 44,
+          "winRate": 38,
+          "grossPnl": 53.81,
+          "netPnl": -59.19,
+          "avgWin": 5.47,
+          "avgLoss": -4.7,
+          "profitFactor": 0.71,
+          "expectancy": -0.83,
+          "maxDrawdown": 81.49,
+          "targetsHit": 5,
+          "stopsHit": 35,
+          "timedExits": 31,
+          "longTrades": 35,
+          "shortTrades": 36,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "INFY.NS",
+        "summary": {
+          "trades": 56,
+          "wins": 19,
+          "losses": 37,
+          "winRate": 33.9,
+          "grossPnl": 97.5,
+          "netPnl": 6.18,
+          "avgWin": 11.58,
+          "avgLoss": -5.78,
+          "profitFactor": 1.03,
+          "expectancy": 0.11,
+          "maxDrawdown": 92.61,
+          "targetsHit": 6,
+          "stopsHit": 27,
+          "timedExits": 23,
+          "longTrades": 20,
+          "shortTrades": 36,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "SBIN.NS",
+        "summary": {
+          "trades": 66,
+          "wins": 22,
+          "losses": 44,
+          "winRate": 33.3,
+          "grossPnl": -7.28,
+          "netPnl": -93.96,
+          "avgWin": 5.08,
+          "avgLoss": -4.68,
+          "profitFactor": 0.54,
+          "expectancy": -1.42,
+          "maxDrawdown": 112.87,
+          "targetsHit": 4,
+          "stopsHit": 36,
+          "timedExits": 26,
+          "longTrades": 31,
+          "shortTrades": 35,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "BHARTIARTL.NS",
+        "summary": {
+          "trades": 67,
+          "wins": 24,
+          "losses": 43,
+          "winRate": 35.8,
+          "grossPnl": 41.87,
+          "netPnl": -118.64,
+          "avgWin": 9.71,
+          "avgLoss": -8.18,
+          "profitFactor": 0.66,
+          "expectancy": -1.77,
+          "maxDrawdown": 162.21,
+          "targetsHit": 3,
+          "stopsHit": 40,
+          "timedExits": 24,
+          "longTrades": 25,
+          "shortTrades": 42,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "ITC.NS",
+        "summary": {
+          "trades": 62,
+          "wins": 19,
+          "losses": 43,
+          "winRate": 30.6,
+          "grossPnl": 8.93,
+          "netPnl": -13.82,
+          "avgWin": 1.73,
+          "avgLoss": -1.09,
+          "profitFactor": 0.7,
+          "expectancy": -0.22,
+          "maxDrawdown": 20.18,
+          "targetsHit": 7,
+          "stopsHit": 34,
+          "timedExits": 21,
+          "longTrades": 26,
+          "shortTrades": 36,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "HINDUNILVR.NS",
+        "summary": {
+          "trades": 68,
+          "wins": 17,
+          "losses": 51,
+          "winRate": 25,
+          "grossPnl": 3.38,
+          "netPnl": -246.87,
+          "avgWin": 14.24,
+          "avgLoss": -9.59,
+          "profitFactor": 0.5,
+          "expectancy": -3.63,
+          "maxDrawdown": 256.56,
+          "targetsHit": 4,
+          "stopsHit": 36,
+          "timedExits": 28,
+          "longTrades": 29,
+          "shortTrades": 39,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "LT.NS",
+        "summary": {
+          "trades": 77,
+          "wins": 25,
+          "losses": 52,
+          "winRate": 32.5,
+          "grossPnl": 123.19,
+          "netPnl": -314.02,
+          "avgWin": 19.97,
+          "avgLoss": -15.64,
+          "profitFactor": 0.61,
+          "expectancy": -4.08,
+          "maxDrawdown": 338.29,
+          "targetsHit": 7,
+          "stopsHit": 40,
+          "timedExits": 30,
+          "longTrades": 39,
+          "shortTrades": 38,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "BAJFINANCE.NS",
+        "summary": {
+          "trades": 65,
+          "wins": 20,
+          "losses": 45,
+          "winRate": 30.8,
+          "grossPnl": 6.03,
+          "netPnl": -65.06,
+          "avgWin": 6.5,
+          "avgLoss": -4.33,
+          "profitFactor": 0.67,
+          "expectancy": -1,
+          "maxDrawdown": 79.6,
+          "targetsHit": 7,
+          "stopsHit": 36,
+          "timedExits": 22,
+          "longTrades": 30,
+          "shortTrades": 35,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "AXISBANK.NS",
+        "summary": {
+          "trades": 64,
+          "wins": 28,
+          "losses": 36,
+          "winRate": 43.8,
+          "grossPnl": 124.23,
+          "netPnl": 24.51,
+          "avgWin": 6.87,
+          "avgLoss": -4.66,
+          "profitFactor": 1.15,
+          "expectancy": 0.38,
+          "maxDrawdown": 70.09,
+          "targetsHit": 2,
+          "stopsHit": 26,
+          "timedExits": 36,
+          "longTrades": 31,
+          "shortTrades": 33,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "KOTAKBANK.NS",
+        "summary": {
+          "trades": 82,
+          "wins": 26,
+          "losses": 56,
+          "winRate": 31.7,
+          "grossPnl": -1.51,
+          "netPnl": -40.16,
+          "avgWin": 2.12,
+          "avgLoss": -1.7,
+          "profitFactor": 0.58,
+          "expectancy": -0.49,
+          "maxDrawdown": 42.77,
+          "targetsHit": 7,
+          "stopsHit": 49,
+          "timedExits": 26,
+          "longTrades": 38,
+          "shortTrades": 44,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "MARUTI.NS",
+        "summary": {
+          "trades": 72,
+          "wins": 22,
+          "losses": 50,
+          "winRate": 30.6,
+          "grossPnl": -5.81,
+          "netPnl": -1445.08,
+          "avgWin": 75.17,
+          "avgLoss": -61.98,
+          "profitFactor": 0.53,
+          "expectancy": -20.07,
+          "maxDrawdown": 1682.47,
+          "targetsHit": 2,
+          "stopsHit": 40,
+          "timedExits": 30,
+          "longTrades": 31,
+          "shortTrades": 41,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "SUNPHARMA.NS",
+        "summary": {
+          "trades": 72,
+          "wins": 25,
+          "losses": 47,
+          "winRate": 34.7,
+          "grossPnl": 15.28,
+          "netPnl": -131.36,
+          "avgWin": 5.93,
+          "avgLoss": -5.95,
+          "profitFactor": 0.53,
+          "expectancy": -1.82,
+          "maxDrawdown": 145.09,
+          "targetsHit": 4,
+          "stopsHit": 34,
+          "timedExits": 34,
+          "longTrades": 41,
+          "shortTrades": 31,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "TITAN.NS",
+        "summary": {
+          "trades": 69,
+          "wins": 28,
+          "losses": 41,
+          "winRate": 40.6,
+          "grossPnl": 184,
+          "netPnl": -227.26,
+          "avgWin": 20.53,
+          "avgLoss": -19.56,
+          "profitFactor": 0.72,
+          "expectancy": -3.29,
+          "maxDrawdown": 320.56,
+          "targetsHit": 5,
+          "stopsHit": 33,
+          "timedExits": 31,
+          "longTrades": 31,
+          "shortTrades": 38,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "ASIANPAINT.NS",
+        "summary": {
+          "trades": 67,
+          "wins": 26,
+          "losses": 41,
+          "winRate": 38.8,
+          "grossPnl": 127.92,
+          "netPnl": -125.64,
+          "avgWin": 13.13,
+          "avgLoss": -11.39,
+          "profitFactor": 0.73,
+          "expectancy": -1.88,
+          "maxDrawdown": 204.2,
+          "targetsHit": 4,
+          "stopsHit": 32,
+          "timedExits": 31,
+          "longTrades": 29,
+          "shortTrades": 38,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "ULTRACEMCO.NS",
+        "summary": {
+          "trades": 72,
+          "wins": 23,
+          "losses": 49,
+          "winRate": 31.9,
+          "grossPnl": 304.32,
+          "netPnl": -942.15,
+          "avgWin": 52.85,
+          "avgLoss": -44.04,
+          "profitFactor": 0.56,
+          "expectancy": -13.09,
+          "maxDrawdown": 1000.42,
+          "targetsHit": 5,
+          "stopsHit": 34,
+          "timedExits": 33,
+          "longTrades": 35,
+          "shortTrades": 37,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "HCLTECH.NS",
+        "summary": {
+          "trades": 68,
+          "wins": 18,
+          "losses": 50,
+          "winRate": 26.5,
+          "grossPnl": -80.55,
+          "netPnl": -197.67,
+          "avgWin": 7.95,
+          "avgLoss": -6.81,
+          "profitFactor": 0.42,
+          "expectancy": -2.91,
+          "maxDrawdown": 201.76,
+          "targetsHit": 2,
+          "stopsHit": 42,
+          "timedExits": 24,
+          "longTrades": 27,
+          "shortTrades": 41,
+          "sampleDays": 60
+        }
+      }
+    ]
+  },
+  {
+    "summary": {
+      "timestamp": "2026-04-27T15:57:37.811Z",
+      "description": "Phase 1: Validate the Edge (60d sample with realistic NSE costs + 2bps slippage)",
+      "stocksTested": 20,
+      "maxSampleDays": 60,
+      "totalTrades": 429,
+      "totalWins": 151,
+      "totalLosses": 278,
+      "winRate": 35.2,
+      "totalGrossPnl": 705.06,
+      "totalNetPnl": -1532.42,
+      "expectancyPerTrade": -3.57,
+      "setupStats": {
+        "Trend Pullback Long": {
+          "trades": 52,
+          "wins": 17,
+          "netPnl": -260.0500000000001
+        },
+        "Trend Continuation Short": {
+          "trades": 69,
+          "wins": 25,
+          "netPnl": 40.51999999999998
+        },
+        "Breakout Watch": {
+          "trades": 93,
+          "wins": 34,
+          "netPnl": -359.16999999999996
+        },
+        "Trend Pullback Short": {
+          "trades": 67,
+          "wins": 27,
+          "netPnl": -221.53999999999994
+        },
+        "Breakdown Watch": {
+          "trades": 92,
+          "wins": 28,
+          "netPnl": -819.0099999999999
+        },
+        "Trend Continuation Long": {
+          "trades": 56,
+          "wins": 20,
+          "netPnl": 86.83000000000003
+        }
+      }
+    },
+    "details": [
+      {
+        "symbol": "RELIANCE.NS",
+        "summary": {
+          "trades": 59,
+          "wins": 20,
+          "losses": 39,
+          "winRate": 33.9,
+          "grossPnl": -3.59,
+          "netPnl": -101.05,
+          "avgWin": 5.92,
+          "avgLoss": -5.63,
+          "profitFactor": 0.54,
+          "expectancy": -1.71,
+          "maxDrawdown": 111.76,
+          "targetsHit": 1,
+          "stopsHit": 22,
+          "timedExits": 36,
+          "longTrades": 28,
+          "shortTrades": 31,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "TCS.NS",
+        "summary": {
+          "trades": 54,
+          "wins": 17,
+          "losses": 37,
+          "winRate": 31.5,
+          "grossPnl": 8.82,
+          "netPnl": -214.15,
+          "avgWin": 14.19,
+          "avgLoss": -12.31,
+          "profitFactor": 0.53,
+          "expectancy": -3.97,
+          "maxDrawdown": 284.66,
+          "targetsHit": 1,
+          "stopsHit": 24,
+          "timedExits": 29,
+          "longTrades": 19,
+          "shortTrades": 35,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "SUNPHARMA.NS",
+        "summary": {
+          "trades": 66,
+          "wins": 22,
+          "losses": 44,
+          "winRate": 33.3,
+          "grossPnl": -8.43,
+          "netPnl": -143.23,
+          "avgWin": 7.08,
+          "avgLoss": -6.79,
+          "profitFactor": 0.52,
+          "expectancy": -2.17,
+          "maxDrawdown": 145.81,
+          "targetsHit": 1,
+          "stopsHit": 26,
+          "timedExits": 39,
+          "longTrades": 35,
+          "shortTrades": 31,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "TITAN.NS",
+        "summary": {
+          "trades": 68,
+          "wins": 24,
+          "losses": 44,
+          "winRate": 35.3,
+          "grossPnl": -101.29,
+          "netPnl": -508.4,
+          "avgWin": 18.08,
+          "avgLoss": -21.41,
+          "profitFactor": 0.46,
+          "expectancy": -7.48,
+          "maxDrawdown": 512.84,
+          "targetsHit": 2,
+          "stopsHit": 29,
+          "timedExits": 37,
+          "longTrades": 34,
+          "shortTrades": 34,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "ASIANPAINT.NS",
+        "summary": {
+          "trades": 58,
+          "wins": 27,
+          "losses": 31,
+          "winRate": 46.6,
+          "grossPnl": 191.26,
+          "netPnl": -26.71,
+          "avgWin": 11.64,
+          "avgLoss": -11,
+          "profitFactor": 0.92,
+          "expectancy": -0.46,
+          "maxDrawdown": 67.44,
+          "targetsHit": 2,
+          "stopsHit": 20,
+          "timedExits": 36,
+          "longTrades": 27,
+          "shortTrades": 31,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "ULTRACEMCO.NS",
+        "summary": {
+          "trades": 61,
+          "wins": 23,
+          "losses": 38,
+          "winRate": 37.7,
+          "grossPnl": 758.8,
+          "netPnl": -290.38,
+          "avgWin": 64.99,
+          "avgLoss": -46.98,
+          "profitFactor": 0.84,
+          "expectancy": -4.76,
+          "maxDrawdown": 431.94,
+          "targetsHit": 4,
+          "stopsHit": 20,
+          "timedExits": 37,
+          "longTrades": 28,
+          "shortTrades": 33,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "HCLTECH.NS",
+        "summary": {
+          "trades": 63,
+          "wins": 18,
+          "losses": 45,
+          "winRate": 28.6,
+          "grossPnl": -140.51,
+          "netPnl": -248.5,
+          "avgWin": 4.64,
+          "avgLoss": -7.38,
+          "profitFactor": 0.25,
+          "expectancy": -3.94,
+          "maxDrawdown": 257.91,
+          "targetsHit": 0,
+          "stopsHit": 29,
+          "timedExits": 34,
+          "longTrades": 30,
+          "shortTrades": 33,
+          "sampleDays": 60
+        }
+      }
+    ]
+  },
+  {
+    "summary": {
+      "timestamp": "2026-04-27T16:19:17.877Z",
+      "description": "Phase 1: Validate the Edge (60d sample with realistic NSE costs + 2bps slippage)",
+      "stocksTested": 20,
+      "maxSampleDays": 60,
+      "totalTrades": 876,
+      "totalWins": 305,
+      "totalLosses": 571,
+      "winRate": 34.8,
+      "totalGrossPnl": 438.81,
+      "totalNetPnl": -3209.39,
+      "expectancyPerTrade": -3.66,
+      "setupStats": {
+        "Trend Pullback Long": {
+          "trades": 189,
+          "wins": 62,
+          "netPnl": -512.02
+        },
+        "Trend Continuation Short": {
+          "trades": 232,
+          "wins": 83,
+          "netPnl": -670.22
+        },
+        "Trend Pullback Short": {
+          "trades": 250,
+          "wins": 89,
+          "netPnl": -930.77
+        },
+        "Trend Continuation Long": {
+          "trades": 205,
+          "wins": 71,
+          "netPnl": -1096.3799999999999
+        }
+      }
+    },
+    "details": [
+      {
+        "symbol": "RELIANCE.NS",
+        "summary": {
+          "trades": 48,
+          "wins": 15,
+          "losses": 33,
+          "winRate": 31.3,
+          "grossPnl": -23.31,
+          "netPnl": -102.32,
+          "avgWin": 5.4,
+          "avgLoss": -5.55,
+          "profitFactor": 0.44,
+          "expectancy": -2.13,
+          "maxDrawdown": 113.03,
+          "targetsHit": 1,
+          "stopsHit": 19,
+          "timedExits": 28,
+          "longTrades": 20,
+          "shortTrades": 28,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "TCS.NS",
+        "summary": {
+          "trades": 40,
+          "wins": 10,
+          "losses": 30,
+          "winRate": 25,
+          "grossPnl": -30.75,
+          "netPnl": -195.92,
+          "avgWin": 13.55,
+          "avgLoss": -11.05,
+          "profitFactor": 0.41,
+          "expectancy": -4.9,
+          "maxDrawdown": 206.86,
+          "targetsHit": 1,
+          "stopsHit": 18,
+          "timedExits": 21,
+          "longTrades": 13,
+          "shortTrades": 27,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "HDFCBANK.NS",
+        "summary": {
+          "trades": 44,
+          "wins": 14,
+          "losses": 30,
+          "winRate": 31.8,
+          "grossPnl": 35.85,
+          "netPnl": -8.57,
+          "avgWin": 5.38,
+          "avgLoss": -2.8,
+          "profitFactor": 0.9,
+          "expectancy": -0.19,
+          "maxDrawdown": 39.61,
+          "targetsHit": 0,
+          "stopsHit": 16,
+          "timedExits": 28,
+          "longTrades": 16,
+          "shortTrades": 28,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "ICICIBANK.NS",
+        "summary": {
+          "trades": 45,
+          "wins": 18,
+          "losses": 27,
+          "winRate": 40,
+          "grossPnl": 4.52,
+          "netPnl": -66.16,
+          "avgWin": 4.4,
+          "avgLoss": -5.38,
+          "profitFactor": 0.54,
+          "expectancy": -1.47,
+          "maxDrawdown": 84.22,
+          "targetsHit": 0,
+          "stopsHit": 18,
+          "timedExits": 27,
+          "longTrades": 19,
+          "shortTrades": 26,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "INFY.NS",
+        "summary": {
+          "trades": 42,
+          "wins": 13,
+          "losses": 29,
+          "winRate": 31,
+          "grossPnl": -52.57,
+          "netPnl": -120.2,
+          "avgWin": 5.43,
+          "avgLoss": -6.58,
+          "profitFactor": 0.37,
+          "expectancy": -2.86,
+          "maxDrawdown": 142.57,
+          "targetsHit": 1,
+          "stopsHit": 18,
+          "timedExits": 23,
+          "longTrades": 15,
+          "shortTrades": 27,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "SBIN.NS",
+        "summary": {
+          "trades": 56,
+          "wins": 20,
+          "losses": 36,
+          "winRate": 35.7,
+          "grossPnl": 49.9,
+          "netPnl": -23.91,
+          "avgWin": 6.87,
+          "avgLoss": -4.48,
+          "profitFactor": 0.85,
+          "expectancy": -0.43,
+          "maxDrawdown": 65.58,
+          "targetsHit": 4,
+          "stopsHit": 21,
+          "timedExits": 31,
+          "longTrades": 26,
+          "shortTrades": 30,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "BHARTIARTL.NS",
+        "summary": {
+          "trades": 45,
+          "wins": 20,
+          "losses": 25,
+          "winRate": 44.4,
+          "grossPnl": 67.51,
+          "netPnl": -41.95,
+          "avgWin": 8.66,
+          "avgLoss": -8.61,
+          "profitFactor": 0.81,
+          "expectancy": -0.93,
+          "maxDrawdown": 80.97,
+          "targetsHit": 1,
+          "stopsHit": 18,
+          "timedExits": 26,
+          "longTrades": 20,
+          "shortTrades": 25,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "ITC.NS",
+        "summary": {
+          "trades": 41,
+          "wins": 12,
+          "losses": 29,
+          "winRate": 29.3,
+          "grossPnl": 4.25,
+          "netPnl": -10.73,
+          "avgWin": 1.9,
+          "avgLoss": -1.16,
+          "profitFactor": 0.68,
+          "expectancy": -0.26,
+          "maxDrawdown": 18.9,
+          "targetsHit": 3,
+          "stopsHit": 18,
+          "timedExits": 20,
+          "longTrades": 20,
+          "shortTrades": 21,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "HINDUNILVR.NS",
+        "summary": {
+          "trades": 48,
+          "wins": 13,
+          "losses": 35,
+          "winRate": 27.1,
+          "grossPnl": -56.34,
+          "netPnl": -231.95,
+          "avgWin": 10.35,
+          "avgLoss": -10.47,
+          "profitFactor": 0.37,
+          "expectancy": -4.83,
+          "maxDrawdown": 231.95,
+          "targetsHit": 2,
+          "stopsHit": 20,
+          "timedExits": 26,
+          "longTrades": 23,
+          "shortTrades": 25,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "LT.NS",
+        "summary": {
+          "trades": 53,
+          "wins": 20,
+          "losses": 33,
+          "winRate": 37.7,
+          "grossPnl": 129.94,
+          "netPnl": -172.01,
+          "avgWin": 18.62,
+          "avgLoss": -16.5,
+          "profitFactor": 0.68,
+          "expectancy": -3.25,
+          "maxDrawdown": 204.05,
+          "targetsHit": 3,
+          "stopsHit": 19,
+          "timedExits": 31,
+          "longTrades": 30,
+          "shortTrades": 23,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "BAJFINANCE.NS",
+        "summary": {
+          "trades": 41,
+          "wins": 15,
+          "losses": 26,
+          "winRate": 36.6,
+          "grossPnl": 36.41,
+          "netPnl": -7.94,
+          "avgWin": 7.68,
+          "avgLoss": -4.74,
+          "profitFactor": 0.94,
+          "expectancy": -0.19,
+          "maxDrawdown": 73.32,
+          "targetsHit": 0,
+          "stopsHit": 18,
+          "timedExits": 23,
+          "longTrades": 18,
+          "shortTrades": 23,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "AXISBANK.NS",
+        "summary": {
+          "trades": 47,
+          "wins": 20,
+          "losses": 27,
+          "winRate": 42.6,
+          "grossPnl": 63.66,
+          "netPnl": -8.91,
+          "avgWin": 7.55,
+          "avgLoss": -5.92,
+          "profitFactor": 0.94,
+          "expectancy": -0.19,
+          "maxDrawdown": 51.2,
+          "targetsHit": 1,
+          "stopsHit": 19,
+          "timedExits": 27,
+          "longTrades": 23,
+          "shortTrades": 24,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "KOTAKBANK.NS",
+        "summary": {
+          "trades": 43,
+          "wins": 16,
+          "losses": 27,
+          "winRate": 37.2,
+          "grossPnl": -9.7,
+          "netPnl": -29.81,
+          "avgWin": 0.93,
+          "avgLoss": -1.66,
+          "profitFactor": 0.33,
+          "expectancy": -0.69,
+          "maxDrawdown": 31.57,
+          "targetsHit": 0,
+          "stopsHit": 16,
+          "timedExits": 27,
+          "longTrades": 20,
+          "shortTrades": 23,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "MARUTI.NS",
+        "summary": {
+          "trades": 52,
+          "wins": 14,
+          "losses": 38,
+          "winRate": 26.9,
+          "grossPnl": -512.15,
+          "netPnl": -1546.67,
+          "avgWin": 87.04,
+          "avgLoss": -72.77,
+          "profitFactor": 0.44,
+          "expectancy": -29.74,
+          "maxDrawdown": 1934.75,
+          "targetsHit": 2,
+          "stopsHit": 26,
+          "timedExits": 24,
+          "longTrades": 20,
+          "shortTrades": 32,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "SUNPHARMA.NS",
+        "summary": {
+          "trades": 52,
+          "wins": 21,
+          "losses": 31,
+          "winRate": 40.4,
+          "grossPnl": 35.73,
+          "netPnl": -70.56,
+          "avgWin": 6.46,
+          "avgLoss": -6.65,
+          "profitFactor": 0.66,
+          "expectancy": -1.36,
+          "maxDrawdown": 80.29,
+          "targetsHit": 1,
+          "stopsHit": 19,
+          "timedExits": 32,
+          "longTrades": 28,
+          "shortTrades": 24,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "TITAN.NS",
+        "summary": {
+          "trades": 49,
+          "wins": 16,
+          "losses": 33,
+          "winRate": 32.7,
+          "grossPnl": -2.93,
+          "netPnl": -295.36,
+          "avgWin": 20.65,
+          "avgLoss": -18.96,
+          "profitFactor": 0.53,
+          "expectancy": -6.03,
+          "maxDrawdown": 295.36,
+          "targetsHit": 2,
+          "stopsHit": 19,
+          "timedExits": 28,
+          "longTrades": 23,
+          "shortTrades": 26,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "ASIANPAINT.NS",
+        "summary": {
+          "trades": 42,
+          "wins": 21,
+          "losses": 21,
+          "winRate": 50,
+          "grossPnl": 117.57,
+          "netPnl": -41.42,
+          "avgWin": 8.95,
+          "avgLoss": -10.92,
+          "profitFactor": 0.82,
+          "expectancy": -0.99,
+          "maxDrawdown": 57.11,
+          "targetsHit": 0,
+          "stopsHit": 15,
+          "timedExits": 27,
+          "longTrades": 19,
+          "shortTrades": 23,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "ULTRACEMCO.NS",
+        "summary": {
+          "trades": 43,
+          "wins": 17,
+          "losses": 26,
+          "winRate": 39.5,
+          "grossPnl": 701.32,
+          "netPnl": -37.93,
+          "avgWin": 62.44,
+          "avgLoss": -42.29,
+          "profitFactor": 0.97,
+          "expectancy": -0.88,
+          "maxDrawdown": 508.23,
+          "targetsHit": 2,
+          "stopsHit": 12,
+          "timedExits": 29,
+          "longTrades": 20,
+          "shortTrades": 23,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "HCLTECH.NS",
+        "summary": {
+          "trades": 45,
+          "wins": 10,
+          "losses": 35,
+          "winRate": 22.2,
+          "grossPnl": -120.1,
+          "netPnl": -197.07,
+          "avgWin": 3.68,
+          "avgLoss": -6.68,
+          "profitFactor": 0.16,
+          "expectancy": -4.38,
+          "maxDrawdown": 205.72,
+          "targetsHit": 0,
+          "stopsHit": 21,
+          "timedExits": 24,
+          "longTrades": 21,
+          "shortTrades": 24,
+          "sampleDays": 60
+        }
+      }
+    ]
+  },
+  {
+    "summary": {
+      "timestamp": "2026-04-27T17:23:29.205Z",
+      "description": "Phase 1: Validate the Edge (60d sample with realistic NSE costs + 2bps slippage)",
+      "stocksTested": 20,
+      "maxSampleDays": 60,
+      "totalTrades": 1020,
+      "totalWins": 271,
+      "totalLosses": 749,
+      "winRate": 26.6,
+      "totalGrossPnl": 292.28,
+      "totalNetPnl": -4005.96,
+      "expectancyPerTrade": -3.93,
+      "setupStats": {
+        "Trend Pullback Long": {
+          "trades": 422,
+          "wins": 98,
+          "netPnl": -1082.4000000000003
+        },
+        "Trend Continuation Short": {
+          "trades": 552,
+          "wins": 150,
+          "netPnl": -1782.9799999999996
+        },
+        "Trend Pullback Short": {
+          "trades": 584,
+          "wins": 162,
+          "netPnl": -2830.800000000002
+        },
+        "Trend Continuation Long": {
+          "trades": 482,
+          "wins": 132,
+          "netPnl": -2315.7400000000007
+        }
+      }
+    },
+    "details": [
+      {
+        "symbol": "RELIANCE.NS",
+        "summary": {
+          "trades": 58,
+          "wins": 14,
+          "losses": 44,
+          "winRate": 24.1,
+          "grossPnl": -27.37,
+          "netPnl": -123.26,
+          "avgWin": 4.7,
+          "avgLoss": -4.3,
+          "profitFactor": 0.35,
+          "expectancy": -2.13,
+          "maxDrawdown": 137.24,
+          "targetsHit": 2,
+          "stopsHit": 39,
+          "timedExits": 17,
+          "longTrades": 23,
+          "shortTrades": 35,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "TCS.NS",
+        "summary": {
+          "trades": 48,
+          "wins": 9,
+          "losses": 39,
+          "winRate": 18.8,
+          "grossPnl": -14.87,
+          "netPnl": -212.49,
+          "avgWin": 14.37,
+          "avgLoss": -8.76,
+          "profitFactor": 0.38,
+          "expectancy": -4.43,
+          "maxDrawdown": 232.71,
+          "targetsHit": 3,
+          "stopsHit": 29,
+          "timedExits": 16,
+          "longTrades": 15,
+          "shortTrades": 33,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "HDFCBANK.NS",
+        "summary": {
+          "trades": 56,
+          "wins": 13,
+          "losses": 43,
+          "winRate": 23.2,
+          "grossPnl": 27.54,
+          "netPnl": -29.4,
+          "avgWin": 5.62,
+          "avgLoss": -2.38,
+          "profitFactor": 0.71,
+          "expectancy": -0.53,
+          "maxDrawdown": 58.72,
+          "targetsHit": 3,
+          "stopsHit": 39,
+          "timedExits": 14,
+          "longTrades": 19,
+          "shortTrades": 37,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "ICICIBANK.NS",
+        "summary": {
+          "trades": 57,
+          "wins": 15,
+          "losses": 42,
+          "winRate": 26.3,
+          "grossPnl": 6.63,
+          "netPnl": -83.43,
+          "avgWin": 5.04,
+          "avgLoss": -3.78,
+          "profitFactor": 0.48,
+          "expectancy": -1.46,
+          "maxDrawdown": 97.1,
+          "targetsHit": 3,
+          "stopsHit": 37,
+          "timedExits": 17,
+          "longTrades": 23,
+          "shortTrades": 34,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "INFY.NS",
+        "summary": {
+          "trades": 55,
+          "wins": 14,
+          "losses": 41,
+          "winRate": 25.5,
+          "grossPnl": -21.26,
+          "netPnl": -109.46,
+          "avgWin": 5.04,
+          "avgLoss": -4.39,
+          "profitFactor": 0.39,
+          "expectancy": -1.99,
+          "maxDrawdown": 128.9,
+          "targetsHit": 5,
+          "stopsHit": 34,
+          "timedExits": 16,
+          "longTrades": 19,
+          "shortTrades": 36,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "SBIN.NS",
+        "summary": {
+          "trades": 64,
+          "wins": 19,
+          "losses": 45,
+          "winRate": 29.7,
+          "grossPnl": 34.03,
+          "netPnl": -49.94,
+          "avgWin": 5.48,
+          "avgLoss": -3.42,
+          "profitFactor": 0.68,
+          "expectancy": -0.78,
+          "maxDrawdown": 74.25,
+          "targetsHit": 4,
+          "stopsHit": 35,
+          "timedExits": 25,
+          "longTrades": 27,
+          "shortTrades": 37,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "BHARTIARTL.NS",
+        "summary": {
+          "trades": 55,
+          "wins": 18,
+          "losses": 37,
+          "winRate": 32.7,
+          "grossPnl": 42.99,
+          "netPnl": -94,
+          "avgWin": 8.28,
+          "avgLoss": -6.57,
+          "profitFactor": 0.61,
+          "expectancy": -1.71,
+          "maxDrawdown": 111.82,
+          "targetsHit": 3,
+          "stopsHit": 35,
+          "timedExits": 17,
+          "longTrades": 23,
+          "shortTrades": 32,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "ITC.NS",
+        "summary": {
+          "trades": 52,
+          "wins": 13,
+          "losses": 39,
+          "winRate": 25,
+          "grossPnl": 3.09,
+          "netPnl": -15.87,
+          "avgWin": 1.58,
+          "avgLoss": -0.93,
+          "profitFactor": 0.56,
+          "expectancy": -0.31,
+          "maxDrawdown": 19.38,
+          "targetsHit": 5,
+          "stopsHit": 36,
+          "timedExits": 11,
+          "longTrades": 24,
+          "shortTrades": 28,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "HINDUNILVR.NS",
+        "summary": {
+          "trades": 54,
+          "wins": 15,
+          "losses": 39,
+          "winRate": 27.8,
+          "grossPnl": 57.27,
+          "netPnl": -140.33,
+          "avgWin": 10.79,
+          "avgLoss": -7.75,
+          "profitFactor": 0.54,
+          "expectancy": -2.6,
+          "maxDrawdown": 140.33,
+          "targetsHit": 4,
+          "stopsHit": 32,
+          "timedExits": 18,
+          "longTrades": 26,
+          "shortTrades": 28,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "LT.NS",
+        "summary": {
+          "trades": 64,
+          "wins": 21,
+          "losses": 43,
+          "winRate": 32.8,
+          "grossPnl": 167.03,
+          "netPnl": -199.27,
+          "avgWin": 16.73,
+          "avgLoss": -12.8,
+          "profitFactor": 0.64,
+          "expectancy": -3.11,
+          "maxDrawdown": 199.78,
+          "targetsHit": 6,
+          "stopsHit": 36,
+          "timedExits": 22,
+          "longTrades": 37,
+          "shortTrades": 27,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "BAJFINANCE.NS",
+        "summary": {
+          "trades": 51,
+          "wins": 14,
+          "losses": 37,
+          "winRate": 27.5,
+          "grossPnl": -22.23,
+          "netPnl": -77.33,
+          "avgWin": 5.09,
+          "avgLoss": -4.01,
+          "profitFactor": 0.48,
+          "expectancy": -1.52,
+          "maxDrawdown": 90.91,
+          "targetsHit": 3,
+          "stopsHit": 33,
+          "timedExits": 15,
+          "longTrades": 25,
+          "shortTrades": 26,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "AXISBANK.NS",
+        "summary": {
+          "trades": 57,
+          "wins": 19,
+          "losses": 38,
+          "winRate": 33.3,
+          "grossPnl": 78.94,
+          "netPnl": -9.25,
+          "avgWin": 8.06,
+          "avgLoss": -4.27,
+          "profitFactor": 0.94,
+          "expectancy": -0.16,
+          "maxDrawdown": 56.39,
+          "targetsHit": 5,
+          "stopsHit": 33,
+          "timedExits": 19,
+          "longTrades": 27,
+          "shortTrades": 30,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "KOTAKBANK.NS",
+        "summary": {
+          "trades": 60,
+          "wins": 14,
+          "losses": 46,
+          "winRate": 23.3,
+          "grossPnl": -8.86,
+          "netPnl": -36.85,
+          "avgWin": 1.64,
+          "avgLoss": -1.3,
+          "profitFactor": 0.38,
+          "expectancy": -0.61,
+          "maxDrawdown": 37.9,
+          "targetsHit": 4,
+          "stopsHit": 39,
+          "timedExits": 17,
+          "longTrades": 28,
+          "shortTrades": 32,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "MARUTI.NS",
+        "summary": {
+          "trades": 65,
+          "wins": 13,
+          "losses": 52,
+          "winRate": 20,
+          "grossPnl": -488.58,
+          "netPnl": -1776.74,
+          "avgWin": 76.73,
+          "avgLoss": -53.35,
+          "profitFactor": 0.36,
+          "expectancy": -27.33,
+          "maxDrawdown": 1796.43,
+          "targetsHit": 3,
+          "stopsHit": 48,
+          "timedExits": 14,
+          "longTrades": 26,
+          "shortTrades": 39,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "SUNPHARMA.NS",
+        "summary": {
+          "trades": 58,
+          "wins": 19,
+          "losses": 39,
+          "winRate": 32.8,
+          "grossPnl": 35.95,
+          "netPnl": -82.81,
+          "avgWin": 7.15,
+          "avgLoss": -5.6,
+          "profitFactor": 0.62,
+          "expectancy": -1.43,
+          "maxDrawdown": 87.82,
+          "targetsHit": 2,
+          "stopsHit": 33,
+          "timedExits": 23,
+          "longTrades": 33,
+          "shortTrades": 25,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "TITAN.NS",
+        "summary": {
+          "trades": 61,
+          "wins": 16,
+          "losses": 45,
+          "winRate": 26.2,
+          "grossPnl": 49.17,
+          "netPnl": -314.21,
+          "avgWin": 19.35,
+          "avgLoss": -13.86,
+          "profitFactor": 0.5,
+          "expectancy": -5.15,
+          "maxDrawdown": 314.21,
+          "targetsHit": 6,
+          "stopsHit": 37,
+          "timedExits": 18,
+          "longTrades": 29,
+          "shortTrades": 32,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "ULTRACEMCO.NS",
+        "summary": {
+          "trades": 55,
+          "wins": 16,
+          "losses": 39,
+          "winRate": 29.1,
+          "grossPnl": 456.22,
+          "netPnl": -483.08,
+          "avgWin": 60.98,
+          "avgLoss": -37.41,
+          "profitFactor": 0.67,
+          "expectancy": -8.78,
+          "maxDrawdown": 541.35,
+          "targetsHit": 6,
+          "stopsHit": 31,
+          "timedExits": 18,
+          "longTrades": 24,
+          "shortTrades": 31,
+          "sampleDays": 60
+        }
+      },
+      {
+        "symbol": "HCLTECH.NS",
+        "summary": {
+          "trades": 50,
+          "wins": 9,
+          "losses": 41,
+          "winRate": 18,
+          "grossPnl": -83.41,
+          "netPnl": -168.24,
+          "avgWin": 3.03,
+          "avgLoss": -4.77,
+          "profitFactor": 0.14,
+          "expectancy": -3.36,
+          "maxDrawdown": 170.39,
+          "targetsHit": 1,
+          "stopsHit": 33,
+          "timedExits": 16,
+          "longTrades": 24,
+          "shortTrades": 26,
+          "sampleDays": 60
+        }
+      }
+    ]
+  }
+]
